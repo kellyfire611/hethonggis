@@ -47,9 +47,11 @@
         <div class="row align-items-center justify-content-start">
 			<div class="col col-md-2">
 				<select class="form-control" name="type_search">
-					<option value="tendiadiem">Tên địa điểm</option>
-					<option value="tentinhthanh">Tên tỉnh thành</option>
-					<option value="giatien">Giá tiền</option>
+					<option value="tentourdulich">Tên tour du lịch</option>
+					<option value="tendiadiem">Tên địa điểm tham quan</option>
+					<option value="tendacsan">Tên đặc sản</option>
+					<!-- <option value="tentinhthanh">Tên tỉnh thành</option>
+					<option value="giatien">Giá tiền</option> -->
 				</select>
 			</div>
 			<div class="col">
@@ -160,7 +162,7 @@
                                     </a>
                                 </div>
                             </div>
-							<h4 class="text-uppercase pt-10"><a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->id]) }}">{{ $diadiem->tendiadiem }}</a></h4>
+							<h4 class="text-uppercase pt-10"><a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->id]) }}">{!! $diadiem->tendiadiem !!}</a></h4>
 							<p>
 							<input type="number" class="rating" value="{{ $diadiem->diemtrungbinh }}" data-step="1" data-size="xs" data-readonly="true" data-theme="krajee-svg" data-show-clear="false" data-show-caption="true" data-language="vi" />
                                 {{ $diadiem->motangan }}

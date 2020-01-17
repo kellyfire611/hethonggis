@@ -3,6 +3,7 @@
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\DiaDiemController;
+use App\Http\Controllers\Frontend\DacSanController;
 use App\Http\Controllers\Frontend\TourDuLichController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\User\AccountController;
@@ -29,6 +30,11 @@ Route::post('tourdulich/{tourdulich}/goidanhgia/', [TourDuLichController::class,
 Route::get('/diadiem', [DiaDiemController::class, 'index'])->name('diadiem.index');
 Route::get('diadiem/{diadiem}/', [DiaDiemController::class, 'show'])->name('diadiem.show');
 Route::post('diadiem/{diadiem}/goidanhgia/', [DiaDiemController::class, 'goidanhgia'])->name('diadiem.goidanhgia');
+
+// Đặc sản
+Route::get('/dacsan', [DacSanController::class, 'index'])->name('dacsan.index');
+Route::get('dacsan/{dacsan}/', [DacSanController::class, 'show'])->name('dacsan.show');
+Route::post('dacsan/{dacsan}/goidanhgia/', [DacSanController::class, 'goidanhgia'])->name('dacsan.goidanhgia');
 
 // Search
 Route::post('timkiem', [HomeController::class, 'search'])->name('search');

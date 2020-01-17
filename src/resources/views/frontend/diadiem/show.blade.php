@@ -3,6 +3,7 @@
 @section('title', app_name() . ' | ' . __('navs.general.home'))
 
 @push('after-styles')
+<link rel="stylesheet" href="{{ asset('vendor/leaflet/leaflet.css') }}" />
 <style>
   #map {
     height: 100%;
@@ -12,6 +13,9 @@
     margin: 0;
     padding: 0;
   }
+  #mapid {
+        height: 500px;
+    }
 </style>
 @endpush
 
@@ -22,7 +26,7 @@
         <div class="row height align-items-center justify-content-center">
             <div class="col-lg-10">
                 <div class="generic-banner-content">
-                    <h2 class="text-white">{{ $diadiem->tendiadiem }}</h2>
+                    <h2 class="text-white">{!! $diadiem->tendiadiem !!}</h2>
                     <p class="text-white">{{ $diadiem->motangan }}</p>
                 </div>
             </div>
@@ -35,14 +39,13 @@
     <div class="container">
         <h3 class="text-heading">Giới thiệu</h3>
         <ul>
-            <li>Email: {{ $diadiem->email }}</li>
-            <li>Điện thoại: {{ $diadiem->dienthoai }}</li>
-            <li>Hoạt động từ: {{ $diadiem->giomocua }}-{{ $diadiem->giodongcua }}</li>
+            <li>Mã địa điểm: <b>{{ $diadiem->madiemthamquan }}</b></li>
+            <li>Tên địa điểm: <b>{!! $diadiem->tendiadiem !!}</b></li>
             <li>
                 <input type="number" class="rating" value="{{ $diadiem->diemtrungbinh }}" data-step="1" data-size="xs" data-readonly="true" data-theme="krajee-svg" data-show-clear="false" data-show-caption="true" data-language="vi" />
             </li>
         </ul>
-        {!! $diadiem->gioithieu !!}
+        {!! $diadiem->motangan !!}
     </div>
 </section>
 <!-- End Sample Area -->
@@ -50,26 +53,24 @@
 <div class="whole-wrap">
     <div class="container">
     <div class="section-top-border">
-    <h3 class="mb-10">Danh sách dịch vụ</h3>
+    <h3 class="mb-10">Danh sách Đặc sản</h3>
     <div class="table-responsive">  
         <table class="table table-bordered" id="dynamic_field">
             <tr>
                 <th style="width: 35px;">#</th>
                 <th style="width: 175px;">Ảnh đại diện</th>
-                <th>Tên dịch vụ</th>
+                <th>Tên đặc sản</th>
                 <th>Mô tả ngắn</th>
-                <th style="width: 100px;">Giá tiền</th>
             </tr>
             <?php
             $i = 1;
             ?>
-            @foreach($diadiem->dichvus as $dichvu)
+            @foreach($diadiem->dacsans as $dacsan)
             <tr>
                 <td>{{ $i }}</td>
-                <td><img class="img-thumbnail img-table-dichvu" src="{{ asset('storage/'.$dichvu->anhdaidien) }}" alt="{{ $dichvu->tendichvu }}"></td>
-                <td>{{ $dichvu->tendichvu }}</td>
-                <td>{{ $dichvu->motangan }}</div>
-                <td style="text-align: right;">{{ $dichvu->gia }}</div>
+                <td><img class="img-thumbnail img-table-dacsan" src="{{ asset('storage/'.$dacsan->hinhanh) }}" alt="{{ $dacsan->tendacsan }}"></td>
+                <td>{{ $dacsan->tendacsan }}</td>
+                <td>{{ $dacsan->mota }}</div>
             </tr>
             <?php
             $i++;
@@ -90,14 +91,12 @@
             </div>
         </div>
 
-        <div class="section-top-border">
-            <h3>Địa chỉ</h3>
-            <div class="row">
-                <div class="col">
-                    <div class="mapouter"><div class="gmap_canvas"><iframe width="100%" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q={{ $diadiem->GPS }}&t=&z=17&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>NenTang: <a href="https://nentang.vn">nentang.vn</a></div><style>.mapouter{position:relative;text-align:right;height:500px;width:100%;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:100%;}</style></div>
-                </div>
-            </div>
-        </section>
+        <section class="map">
+    <div class="container">
+        <div id="mapid"></div>
+    </div>
+</section>
+
 
         <div class="section-top-border">
             @if($diadiem->danhgias->count() > 0)
@@ -169,6 +168,53 @@
 @endsection
 
 @push('after-scripts')
+<script src="{{ asset('vendor/leaflet/leaflet.js') }}"></script>
+<script>
+            // initialize Leaflet
+            var map = L.map('mapid').setView([{{ $diadiem->GPS }}], 13);
+
+            // Setting custom icon
+            var LeafIcon = L.Icon.extend({
+                options: {
+                    shadowUrl: '{{ asset('vendor/leaflet/images/leaf-shadow.png') }}',
+                    iconSize:     [38, 95], // size of the icon
+                    shadowSize:   [50, 64], // size of the shadow
+                    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                    shadowAnchor: [4, 62],  // the same for the shadow
+                    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                }
+            });
+            var greenIcon = new LeafIcon({iconUrl: '{{ asset('vendor/leaflet/images/leaf-green.png') }}'}),
+                redIcon = new LeafIcon({iconUrl: '{{ asset('vendor/leaflet/images/leaf-red.png') }}'}),
+                orangeIcon = new LeafIcon({iconUrl: '{{ asset('vendor/leaflet/images/leaf-orange.png') }}'});
+
+            // add the OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+            }).addTo(map);
+
+            // show the scale bar on the lower left corner
+            L.control.scale().addTo(map);
+
+            // Add marker các điểm tham quan
+        
+            @if(!empty($diadiem->GPS))
+                var markerTooltipDiemThamQuan = 'Điểm tham quan: <b>{!! $diadiem->tendiadiem !!}</b><br />';
+                markerTooltipDiemThamQuan += '<img src="{{ asset('storage/'.$diadiem->anhdaidien) }}" style="width:120px;" /><br />';
+                
+                @if(!empty($diadiem->dacsans))
+                    markerTooltipDiemThamQuan += '<b>Đặc sản nổi tiếng:</b> <br /><ul style="padding: 10px;list-style: disc;">';
+                    @foreach($diadiem->dacsans as $dacsan)
+                    markerTooltipDiemThamQuan += '<li>{{ $dacsan->tendacsan }}</li>';
+                    @endforeach
+                    markerTooltipDiemThamQuan += '</ul>';
+                @endif
+                
+                var pointDiaDiem = new L.LatLng({{ $diadiem->GPS }});
+                L.marker(pointDiaDiem, {icon: orangeIcon}).bindPopup(markerTooltipDiemThamQuan).addTo(map);
+            @endif
+        </script>
 <script>
     $(document).ready(function(){
         var toolbarOptions = [

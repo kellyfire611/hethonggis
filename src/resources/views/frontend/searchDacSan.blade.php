@@ -29,9 +29,9 @@
         <div class="row align-items-center justify-content-start">
 			<div class="col col-md-2">
 				<select class="form-control" name="type_search">
-					<option value="tendiadiem" {{ $inputs['type_search'] == 'tendiadiem' ? 'selected' : '' }}>Tên địa điểm</option>
-					<option value="tentinhthanh" {{ $inputs['type_search'] == 'tentinhthanh' ? 'selected' : '' }}>Tên tỉnh thành</option>
-					<option value="giatien" {{ $inputs['type_search'] == 'giatien' ? 'selected' : '' }}>Giá tiền</option>
+					<option value="tentourdulich" {{ $inputs['type_search'] == 'tentourdulich' ? 'selected' : '' }}>Tên tour du lịch</option>
+					<option value="tendiadiem" {{ $inputs['type_search'] == 'tendiadiem' ? 'selected' : '' }}>Tên địa điểm tham quan</option>
+					<option value="tendacsan" {{ $inputs['type_search'] == 'tendacsan' ? 'selected' : '' }}>Tên đặc sản</option>
 				</select>
 			</div>
 			<div class="col">
@@ -50,30 +50,43 @@
 		<div class="row d-flex justify-content-center">
 			<div class="menu-content col-lg-8">
 				<div class="title text-center">
-					<h1 class="mb-10">Có {{ $diadiems->count() }} địa điểm Du lịch tìm được</h1>
+					<h1 class="mb-10">Có {{ $dacsans->count() }} Đặc sản tìm được</h1>
 					<p>Được tuyển chọn với niềm tin yêu tuyệt đối từ Thực khách</p>
 				</div>
 			</div>
 		</div>						
 		<div class="row">
-			@if($diadiems->count() <= 0)
+			@if($dacsans->count() <= 0)
 			<div class="single-dish col">
 				<h2><i class="fas fa-sad-tear"></i> Xin lỗi, không tìm thấy Địa điểm nào phù hợp với yêu cầu!</h2>
 			</div>
 			@else
-			@foreach($diadiems as $diadiem)
-			<div class="single-dish col-lg-3">
+			@foreach($dacsans as $dacsan)
+			<div class="single-dish col-lg-4">
 				<div class="thumb box-ratio">
 					<div class="box-ratio-content">
-						<a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->id]) }}">
-							<img class="img-fluid" src="{{ asset('storage/'.$diadiem->anhdaidien) }}" alt="">
+						<a href="{{ route('frontend.dacsan.show', ['dacsan' => $dacsan->id]) }}">
+							<img class="img-fluid" src="{{ asset('storage/'.$dacsan->hinhanh) }}" alt="">
 						</a>
 					</div>
 				</div>
-				<h4 class="text-uppercase pt-10"><a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->id]) }}">{{ $diadiem->tendiadiem }}</a></h4>
+				<h4 class="text-uppercase pt-10"><a href="{{ route('frontend.dacsan.show', ['dacsan' => $dacsan->id]) }}">{!! $dacsan->tendacsan !!}</a></h4>
 				<p>
-					{{ $diadiem->motangan }}
+					{{ $dacsan->motangan }}
 				</p>
+				@if($dacsan->diemthamquans->count() > 0)
+					<h6>Đang được bán tại các Địa điểm tham quan sau:</h6>
+					<ul style="list-style:disc; padding-left: 20px;">
+					@foreach($dacsan->diemthamquans as $diadiem)
+					<li>
+						<!-- <img src="{{ asset('storage/'.$diadiem->anhdaidien) }}" style="width: 50px; height: 50px;" /> -->
+						<a href="{{ route('frontend.diadiem.show', ['id' => $diadiem->id]) }}">{!! $diadiem->tendiadiem !!}</a>
+					</li>
+					@endforeach
+					</ul>
+				@else
+					<b>Đặc sản này chưa có Địa điểm Tham quan nào bán! Quý khách có thể Đặt hàng trước.</b>
+				@endif
 			</div>
 			@endforeach
 			@endif

@@ -80,7 +80,7 @@
                             </a>
                         </div>
                     </div>
-                    <h4 class="text-uppercase pt-10"><a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->id]) }}">{{ $diadiem->tendiadiem }}</a></h4>
+                    <h4 class="text-uppercase pt-10"><a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->id]) }}">{!! $diadiem->tendiadiem !!}</a></h4>
                     <p>
                         <input type="number" class="rating" value="{{ $diadiem->diemtrungbinh }}" data-step="1" data-size="xs" data-readonly="true" data-theme="krajee-svg" data-show-clear="false" data-show-caption="true" data-language="vi" />
                         {{ $diadiem->motangan }}
@@ -192,14 +192,6 @@
         @push('after-scripts')
         <script src="{{ asset('vendor/leaflet/leaflet.js') }}"></script>
         <script>
-            // var mymap = L.map('mapid').setView([51.505, -0.09], 13);
-            // L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            //     maxZoom: 18,
-            //     id: 'mapbox/streets-v11',
-            //     accessToken: 'your.mapbox.access.token'
-            // }).addTo(mymap);
-
             // initialize Leaflet
             var map = L.map('mapid').setView([{{ $tourdulich->diemkhoihanh_toado_string }}], 13);
 

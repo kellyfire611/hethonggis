@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TourDuLich;
 use App\Repositories\Backend\DiaDiemRepository;
 use App\Repositories\Backend\TourDuLichRepository;
+use App\Repositories\Backend\DacSanRepository;
 
 /**
  * Class HomeController.
@@ -26,16 +27,18 @@ class HomeController extends Controller
      */
     protected $DiaDiemRepository;
     protected $TourDuLichRepository;
+    protected $DacSanRepository;
 
     /**
      * DiaDiemController constructor.
      *
      * @param DiaDiemRepository $DiaDiemRepository
      */
-    public function __construct(DiaDiemRepository $DiaDiemRepository, TourDuLichRepository $TourDuLichRepository)
+    public function __construct(DiaDiemRepository $DiaDiemRepository, TourDuLichRepository $TourDuLichRepository, DacSanRepository $DacSanRepository)
     {
         $this->TourDuLichRepository = $TourDuLichRepository;
         $this->DiaDiemRepository = $DiaDiemRepository;
+        $this->DacSanRepository = $DacSanRepository;
     }
 
     /**
@@ -48,38 +51,28 @@ class HomeController extends Controller
 
         $diadiems = DiaDiem::take(12)->get();
 
-        foreach($diadiems as $diadiem)
-        {
+        foreach ($diadiems as $diadiem) {
             $diem = 0;
             $sumDiem = 0;
-            foreach($diadiem->danhgias()->get() as $key=>$value)
-            {
+            foreach ($diadiem->danhgias()->get() as $key => $value) {
                 $sumDiem += empty($value->diem) ? 0 : $value->diem;
             }
-            if($diadiem->danhgias()->count() <= 0)
-            {
+            if ($diadiem->danhgias()->count() <= 0) {
                 $diadiem->diemtrungbinh = 0;
-            }
-            else
-            {
+            } else {
                 $diadiem->diemtrungbinh = $sumDiem / $diadiem->danhgias()->count();
             }
         }
         $topmonans = DiaDiem::all();
-        foreach($topmonans as $diadiem)
-        {
+        foreach ($topmonans as $diadiem) {
             $diem = 0;
             $sumDiem = 0;
-            foreach($diadiem->danhgias()->get() as $key=>$value)
-            {
+            foreach ($diadiem->danhgias()->get() as $key => $value) {
                 $sumDiem += empty($value->diem) ? 0 : $value->diem;
             }
-            if($diadiem->danhgias()->count() <= 0)
-            {
+            if ($diadiem->danhgias()->count() <= 0) {
                 $diadiem->diemtrungbinh = 0;
-            }
-            else
-            {
+            } else {
                 $diadiem->diemtrungbinh = $sumDiem / $diadiem->danhgias()->count();
             }
         }
@@ -100,10 +93,27 @@ class HomeController extends Controller
             'keyword'
         );
 
-        $inputs['keyword'] = trim($inputs['keyword']);
-        $diadiems = $this->DiaDiemRepository->search($inputs);
-        return view('frontend.search')
-            ->with('diadiems', $diadiems)
-            ->with('inputs', $inputs);
+        if ($inputs['type_search'] == 'tentourdulich') {
+
+            $inputs['keyword'] = trim($inputs['keyword']);
+            $tourdulichs = $this->TourDuLichRepository->search($inputs);
+            return view('frontend.searchTourDuLich')
+                ->with('tourdulichs', $tourdulichs)
+                ->with('inputs', $inputs);
+        } else if ($inputs['type_search'] == 'tendiadiem') {
+
+            $inputs['keyword'] = trim($inputs['keyword']);
+            $diadiems = $this->DiaDiemRepository->search($inputs);
+            return view('frontend.searchDiaDiem')
+                ->with('diadiems', $diadiems)
+                ->with('inputs', $inputs);
+        } else if ($inputs['type_search'] == 'tendacsan') {
+
+            $inputs['keyword'] = trim($inputs['keyword']);
+            $dacsans = $this->DacSanRepository->search($inputs);
+            return view('frontend.searchDacSan')
+                ->with('dacsans', $dacsans)
+                ->with('inputs', $inputs);
+        }
     }
 }
