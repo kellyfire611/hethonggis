@@ -11,43 +11,31 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.setPublicPath('public')
-    .setResourceRoot('../') // Turns assets paths in css relative to css file
-    // .options({
-    //     processCssUrls: false,
-    // })
-    .sass('resources/sass/frontend/app.scss', 'css/frontend.css')
-    .sass('resources/sass/backend/app.scss', 'css/backend.css')
-    .js('resources/js/frontend/app.js', 'js/frontend.js')
+//mix.setPublicPath(path.resolve('./public'))
+
+mix.sass('resources/sass/frontend/app.scss', './public/css/frontend.css')
+    .sass('resources/sass/backend/app.scss', './public/css/backend.css')
+    .js('resources/js/frontend/app.js', './public/js/frontend.js')
     .js([
         'resources/js/backend/before.js',
         'resources/js/backend/app.js',
-        'resources/js/backend/after.js'
-    ], 'js/backend.js')
+        'resources/js/backend/after.js',
+    ], './public/js/backend.js')
     .extract([
-        // Extract packages from node_modules to vendor.js
         'jquery',
         'bootstrap',
-        'popper.js',
+        'popper.js/dist/umd/popper',
         'axios',
         'sweetalert2',
-        'lodash'
-    ])
-    .sourceMaps();
+        'lodash',
+        '@fortawesome/fontawesome-svg-core',
+        '@fortawesome/free-brands-svg-icons',
+        '@fortawesome/free-regular-svg-icons',
+        '@fortawesome/free-solid-svg-icons'
+    ]);
 
-if (mix.inProduction()) {
-    mix.version()
-        .options({
-            // Optimize JS minification process
-            terser: {
-                cache: true,
-                parallel: true,
-                sourceMap: true
-            }
-        });
-} else {
-    // Uses inline source-maps on development
-    mix.webpackConfig({
-        devtool: 'inline-source-map'
-    });
+//mix.copy('node_modules/font-awesome/fonts', 'public/fonts');
+
+if (mix.inProduction() || process.env.npm_lifecycle_event !== 'hot') {
+    mix.version();
 }

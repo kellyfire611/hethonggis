@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 use App\Models\DichVu;
 use App\Models\DiaChi;
 use App\Models\DiaDiem;

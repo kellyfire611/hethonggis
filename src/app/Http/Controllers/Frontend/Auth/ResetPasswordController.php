@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Frontend\Auth;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Frontend\Auth\ResetPasswordRequest;
-use App\Repositories\Frontend\Auth\UserRepository;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
+use App\Repositories\Frontend\Auth\UserRepository;
+use App\Http\Requests\Frontend\Auth\ResetPasswordRequest;
 
 /**
  * Class ResetPasswordController.
@@ -49,7 +49,7 @@ class ResetPasswordController extends Controller
 
         $user = $this->userRepository->findByPasswordResetToken($token);
 
-        if ($user && resolve('auth.password.broker')->tokenExists($user, $token)) {
+        if ($user && app()->make('auth.password.broker')->tokenExists($user, $token)) {
             return view('frontend.auth.passwords.reset')
                 ->withToken($token)
                 ->withEmail($user->email);
@@ -80,7 +80,7 @@ class ResetPasswordController extends Controller
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
-        return $response === Password::PASSWORD_RESET
+        return $response == Password::PASSWORD_RESET
             ? $this->sendResetResponse($response)
             : $this->sendResetFailedResponse($request, $response);
     }
@@ -90,6 +90,7 @@ class ResetPasswordController extends Controller
      *
      * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
      * @param  string  $password
+     * @return void
      */
     protected function resetPassword($user, $password)
     {
@@ -114,6 +115,6 @@ class ResetPasswordController extends Controller
      */
     protected function sendResetResponse($response)
     {
-        return redirect()->route(home_route())->withFlashSuccess(e(trans($response)));
+        return redirect()->route(home_route())->withFlashSuccess(trans($response));
     }
 }

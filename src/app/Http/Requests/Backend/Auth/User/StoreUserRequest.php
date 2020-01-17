@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests\Backend\Auth\User;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use LangleyFoxall\LaravelNISTPasswordRules\PasswordRules;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class StoreUserRequest.
@@ -29,10 +28,10 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => ['required'],
-            'last_name' => ['required'],
-            'email' => ['required', 'email', Rule::unique('users')],
-            'password' => PasswordRules::register($this->email),
+            'first_name'     => ['required', 'max:191'],
+            'last_name'  => ['required', 'max:191'],
+            'email'    => ['required', 'email', 'max:191', Rule::unique('users')],
+            'password' => ['required', 'min:6', 'confirmed'],
             'roles' => ['required', 'array'],
         ];
     }

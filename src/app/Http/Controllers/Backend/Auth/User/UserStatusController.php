@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Backend\Auth\User;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\Auth\User\ManageUserRequest;
 use App\Models\Auth\User;
+use App\Http\Controllers\Controller;
 use App\Repositories\Backend\Auth\UserRepository;
+use App\Http\Requests\Backend\Auth\User\ManageUserRequest;
 
 /**
  * Class UserStatusController.
@@ -52,15 +52,15 @@ class UserStatusController extends Controller
      * @param User              $user
      * @param                   $status
      *
-     * @throws \App\Exceptions\GeneralException
      * @return mixed
+     * @throws \App\Exceptions\GeneralException
      */
     public function mark(ManageUserRequest $request, User $user, $status)
     {
-        $this->userRepository->mark($user, (int) $status);
+        $this->userRepository->mark($user, $status);
 
         return redirect()->route(
-            (int) $status === 1 ?
+            $status == 1 ?
             'admin.auth.user.index' :
             'admin.auth.user.deactivated'
         )->withFlashSuccess(__('alerts.backend.users.updated'));
@@ -70,9 +70,9 @@ class UserStatusController extends Controller
      * @param ManageUserRequest $request
      * @param User              $deletedUser
      *
+     * @return mixed
      * @throws \App\Exceptions\GeneralException
      * @throws \Throwable
-     * @return mixed
      */
     public function delete(ManageUserRequest $request, User $deletedUser)
     {
@@ -85,8 +85,8 @@ class UserStatusController extends Controller
      * @param ManageUserRequest $request
      * @param User              $deletedUser
      *
-     * @throws \App\Exceptions\GeneralException
      * @return mixed
+     * @throws \App\Exceptions\GeneralException
      */
     public function restore(ManageUserRequest $request, User $deletedUser)
     {

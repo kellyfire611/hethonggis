@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Backend\Auth\User;
 
-use App\Events\Backend\Auth\User\UserDeleted;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\Auth\User\ManageUserRequest;
-use App\Http\Requests\Backend\Auth\User\StoreUserRequest;
-use App\Http\Requests\Backend\Auth\User\UpdateUserRequest;
 use App\Models\Auth\User;
-use App\Repositories\Backend\Auth\PermissionRepository;
+use App\Http\Controllers\Controller;
+use App\Events\Backend\Auth\User\UserDeleted;
 use App\Repositories\Backend\Auth\RoleRepository;
 use App\Repositories\Backend\Auth\UserRepository;
+use App\Repositories\Backend\Auth\PermissionRepository;
+use App\Http\Requests\Backend\Auth\User\StoreUserRequest;
+use App\Http\Requests\Backend\Auth\User\ManageUserRequest;
+use App\Http\Requests\Backend\Auth\User\UpdateUserRequest;
 
 /**
  * Class UserController.
@@ -60,8 +60,8 @@ class UserController extends Controller
     /**
      * @param StoreUserRequest $request
      *
-     * @throws \Throwable
      * @return mixed
+     * @throws \Throwable
      */
     public function store(StoreUserRequest $request)
     {
@@ -114,9 +114,9 @@ class UserController extends Controller
      * @param UpdateUserRequest $request
      * @param User              $user
      *
+     * @return mixed
      * @throws \App\Exceptions\GeneralException
      * @throws \Throwable
-     * @return mixed
      */
     public function update(UpdateUserRequest $request, User $user)
     {
@@ -135,8 +135,8 @@ class UserController extends Controller
      * @param ManageUserRequest $request
      * @param User              $user
      *
-     * @throws \Exception
      * @return mixed
+     * @throws \Exception
      */
     public function destroy(ManageUserRequest $request, User $user)
     {

@@ -1,12 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreatePermissionTables extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
     public function up()
     {
@@ -27,7 +29,7 @@ class CreatePermissionTables extends Migration
         });
 
         Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames) {
-            $table->unsignedInteger('permission_id');
+            $table->integer('permission_id')->unsigned();
             $table->morphs('model');
 
             $table->foreign('permission_id')
@@ -39,7 +41,7 @@ class CreatePermissionTables extends Migration
         });
 
         Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames) {
-            $table->unsignedInteger('role_id');
+            $table->integer('role_id')->unsigned();
             $table->morphs('model');
 
             $table->foreign('role_id')
@@ -51,8 +53,8 @@ class CreatePermissionTables extends Migration
         });
 
         Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames) {
-            $table->unsignedInteger('permission_id');
-            $table->unsignedInteger('role_id');
+            $table->integer('permission_id')->unsigned();
+            $table->integer('role_id')->unsigned();
 
             $table->foreign('permission_id')
                 ->references('id')
@@ -70,6 +72,8 @@ class CreatePermissionTables extends Migration
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
     public function down()
     {

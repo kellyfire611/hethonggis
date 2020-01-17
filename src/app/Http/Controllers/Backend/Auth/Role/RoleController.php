@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Backend\Auth\Role;
 
-use App\Events\Backend\Auth\Role\RoleDeleted;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\Auth\Role\ManageRoleRequest;
-use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
-use App\Http\Requests\Backend\Auth\Role\UpdateRoleRequest;
 use App\Models\Auth\Role;
-use App\Repositories\Backend\Auth\PermissionRepository;
+use App\Http\Controllers\Controller;
+use App\Events\Backend\Auth\Role\RoleDeleted;
 use App\Repositories\Backend\Auth\RoleRepository;
+use App\Repositories\Backend\Auth\PermissionRepository;
+use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
+use App\Http\Requests\Backend\Auth\Role\ManageRoleRequest;
+use App\Http\Requests\Backend\Auth\Role\UpdateRoleRequest;
 
 /**
  * Class RoleController.
@@ -45,9 +45,9 @@ class RoleController extends Controller
     {
         return view('backend.auth.role.index')
             ->withRoles($this->roleRepository
-            ->with('users', 'permissions')
-            ->orderBy('id')
-            ->paginate());
+                ->with('users', 'permissions')
+                ->orderBy('id', 'asc')
+                ->paginate(25));
     }
 
     /**
@@ -62,11 +62,10 @@ class RoleController extends Controller
     }
 
     /**
-     * @param  StoreRoleRequest  $request
+     * @param StoreRoleRequest $request
      *
      * @return mixed
      * @throws \App\Exceptions\GeneralException
-     * @throws \Throwable
      */
     public function store(StoreRoleRequest $request)
     {
@@ -94,12 +93,11 @@ class RoleController extends Controller
     }
 
     /**
-     * @param  UpdateRoleRequest  $request
-     * @param  Role  $role
+     * @param UpdateRoleRequest $request
+     * @param Role              $role
      *
      * @return mixed
      * @throws \App\Exceptions\GeneralException
-     * @throws \Throwable
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
@@ -112,8 +110,8 @@ class RoleController extends Controller
      * @param ManageRoleRequest $request
      * @param Role              $role
      *
-     * @throws \Exception
      * @return mixed
+     * @throws \Exception
      */
     public function destroy(ManageRoleRequest $request, Role $role)
     {

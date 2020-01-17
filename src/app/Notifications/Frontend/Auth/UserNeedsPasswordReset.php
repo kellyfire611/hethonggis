@@ -3,8 +3,8 @@
 namespace App\Notifications\Frontend\Auth;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 /**
  * Class UserNeedsPasswordReset.
@@ -12,7 +12,6 @@ use Illuminate\Notifications\Notification;
 class UserNeedsPasswordReset extends Notification
 {
     use Queueable;
-
     /**
      * The password reset token.
      *

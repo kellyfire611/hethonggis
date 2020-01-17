@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Backend\User;
 
-use App\Events\Backend\Auth\User\UserUpdated;
+use Tests\TestCase;
 use App\Models\Auth\User;
-use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use App\Events\Backend\Auth\User\UserUpdated;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
 
 class UpdateUserTest extends TestCase
 {
@@ -44,9 +44,9 @@ class UpdateUserTest extends TestCase
         $user = factory(User::class)->create();
         Event::fake();
 
-        $this->assertNotSame('John', $user->first_name);
-        $this->assertNotSame('Doe', $user->last_name);
-        $this->assertNotSame('john@example.com', $user->email);
+        $this->assertNotEquals('John', $user->first_name);
+        $this->assertNotEquals('Doe', $user->last_name);
+        $this->assertNotEquals('john@example.com', $user->email);
 
         $this->patch("/admin/auth/user/{$user->id}", [
             'first_name' => 'John',
@@ -56,9 +56,9 @@ class UpdateUserTest extends TestCase
             'roles' => ['administrator'],
         ]);
 
-        $this->assertSame('John', $user->fresh()->first_name);
-        $this->assertSame('Doe', $user->fresh()->last_name);
-        $this->assertSame('john@example.com', $user->fresh()->email);
+        $this->assertEquals('John', $user->fresh()->first_name);
+        $this->assertEquals('Doe', $user->fresh()->last_name);
+        $this->assertEquals('john@example.com', $user->fresh()->email);
 
         Event::assertDispatched(UserUpdated::class);
     }

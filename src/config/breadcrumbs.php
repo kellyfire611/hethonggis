@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     /*
     |--------------------------------------------------------------------------
     | View Name
@@ -50,4 +51,5 @@ return [
 
     // When a named breadcrumb is used but doesn't exist (InvalidBreadcrumbException)
     'invalid-named-breadcrumb-exception' => true,
+
 ];

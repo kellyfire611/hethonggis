@@ -1,14 +1,14 @@
-import { shallowMount } from '@vue/test-utils';
-import Example from '@/frontend/components/ExampleComponent.vue';
+import {shallow} from '@vue/test-utils';
+import Example from '../../resources/js/frontend/components/ExampleComponent.vue';
 
 describe('Example', () => {
     let wrapper;
 
     beforeEach(() => {
-        wrapper = shallowMount(Example);
+        wrapper = shallow(Example);
     });
 
-    it('should say it is an example component', () => {
+    it('should say it is an example component', function () {
         expect(wrapper.html()).toContain("I'm an example Vue component!");
     });
 });

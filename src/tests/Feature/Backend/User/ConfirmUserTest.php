@@ -2,14 +2,14 @@
 
 namespace Tests\Backend\User;
 
-use App\Events\Backend\Auth\User\UserConfirmed;
-use App\Events\Backend\Auth\User\UserUnconfirmed;
+use Tests\TestCase;
 use App\Models\Auth\User;
-use App\Notifications\Backend\Auth\UserAccountActive;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use App\Events\Backend\Auth\User\UserConfirmed;
+use App\Events\Backend\Auth\User\UserUnconfirmed;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Notifications\Backend\Auth\UserAccountActive;
 
 class ConfirmUserTest extends TestCase
 {
@@ -25,7 +25,7 @@ class ConfirmUserTest extends TestCase
 
         $response = $this->get("/admin/auth/user/{$user->id}/confirm");
 
-        $this->assertSame(true, $user->fresh()->confirmed);
+        $this->assertEquals(1, $user->fresh()->confirmed);
         Event::assertDispatched(UserConfirmed::class);
 
         $response->assertSessionHas(['flash_success' => __('alerts.backend.users.confirmed')]);
@@ -66,7 +66,7 @@ class ConfirmUserTest extends TestCase
 
         $response = $this->get("/admin/auth/user/{$user->id}/unconfirm");
 
-        $this->assertSame(false, $user->fresh()->confirmed);
+        $this->assertEquals(0, $user->fresh()->confirmed);
         Event::assertDispatched(UserUnconfirmed::class);
 
         $response->assertSessionHas(['flash_success' => __('alerts.backend.users.unconfirmed')]);
@@ -113,7 +113,7 @@ class ConfirmUserTest extends TestCase
 
         $this->get("/admin/auth/user/{$user->id}/confirm");
 
-        $this->assertSame(true, $user->fresh()->confirmed);
+        $this->assertEquals(1, $user->fresh()->confirmed);
     }
 
     /** @test */
@@ -124,6 +124,6 @@ class ConfirmUserTest extends TestCase
 
         $this->get("/admin/auth/user/{$user->id}/unconfirm");
 
-        $this->assertSame(false, $user->fresh()->confirmed);
+        $this->assertEquals(0, $user->fresh()->confirmed);
     }
 }

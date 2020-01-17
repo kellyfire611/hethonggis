@@ -4,8 +4,8 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Spatie\Permission\Exceptions\UnauthorizedException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 /**
  * Class Handler.
@@ -18,7 +18,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        GeneralException::class,
+        //
     ];
 
     /**
@@ -34,10 +34,8 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param Exception $exception
-     *
-     * @throws Exception
-     * @return mixed|void
+     * @param  \Exception  $exception
+     * @return void
      */
     public function report(Exception $exception)
     {
@@ -49,9 +47,7 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Exception
+     * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
     {

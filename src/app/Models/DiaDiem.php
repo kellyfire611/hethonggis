@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 use App\Models\DichVu;
 use App\Models\DiaChi;
 use App\Models\DanhGia;
@@ -17,7 +17,7 @@ class DiaDiem extends Eloquent
      *
      * @var string
      */
-    protected $table = 'diadiem';
+    protected $table = 'diemthamquan';
 
     /**
      * The attributes that are mass assignable.
@@ -78,16 +78,16 @@ class DiaDiem extends Eloquent
 
     public function dichvus()
     {
-      return $this->embedsMany(DichVu::class);
+      return $this->hasMany(DichVu::class);
     }
 
     public function diachi()
     {
-      return $this->embedsOne(DiaChi::class);
+      return $this->belongsTo(DiaChi::class);
     }
 
     public function danhgias()
     {
-      return $this->embedsMany(DanhGia::class);
+      return $this->hasMany(DanhGia::class, 'id_diemthamquan', 'id');
     }
 }

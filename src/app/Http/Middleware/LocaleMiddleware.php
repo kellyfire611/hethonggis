@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Carbon\Carbon;
 use Closure;
+use Carbon\Carbon;
 
 /**
  * Class LocaleMiddleware.
@@ -20,26 +20,37 @@ class LocaleMiddleware
      */
     public function handle($request, Closure $next)
     {
-        // Locale is enabled and allowed to be changed
-        if (config('locale.status') && session()->has('locale') && array_key_exists(session()->get('locale'), config('locale.languages'))) {
-            // Set the Laravel locale
-            app()->setLocale(session()->get('locale'));
+        /*
+         * Locale is enabled and allowed to be changed
+         */
+        if (config('locale.status')) {
+            if (session()->has('locale') && in_array(session()->get('locale'), array_keys(config('locale.languages')))) {
 
-            // setLocale for php. Enables ->formatLocalized() with localized values for dates
-            setlocale(LC_TIME, config('locale.languages')[session()->get('locale')][1]);
+                /*
+                 * Set the Laravel locale
+                 */
+                app()->setLocale(session()->get('locale'));
 
-            // setLocale to use Carbon source locales. Enables diffForHumans() localized
-            Carbon::setLocale(config('locale.languages')[session()->get('locale')][0]);
+                /*
+                 * setLocale for php. Enables ->formatLocalized() with localized values for dates
+                 */
+                setlocale(LC_TIME, config('locale.languages')[session()->get('locale')][1]);
 
-            /*
-             * Set the session variable for whether or not the app is using RTL support
-             * for the current language being selected
-             * For use in the blade directive in BladeServiceProvider
-             */
-            if (config('locale.languages')[session()->get('locale')][2]) {
-                session(['lang-rtl' => true]);
-            } else {
-                session()->forget('lang-rtl');
+                /*
+                 * setLocale to use Carbon source locales. Enables diffForHumans() localized
+                 */
+                Carbon::setLocale(config('locale.languages')[session()->get('locale')][0]);
+
+                /*
+                 * Set the session variable for whether or not the app is using RTL support
+                 * for the current language being selected
+                 * For use in the blade directive in BladeServiceProvider
+                 */
+                if (config('locale.languages')[session()->get('locale')][2]) {
+                    session(['lang-rtl' => true]);
+                } else {
+                    session()->forget('lang-rtl');
+                }
             }
         }
 

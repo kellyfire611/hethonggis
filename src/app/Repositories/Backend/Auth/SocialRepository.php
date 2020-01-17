@@ -2,10 +2,10 @@
 
 namespace App\Repositories\Backend\Access\User;
 
-use App\Events\Backend\Auth\User\UserSocialDeleted;
-use App\Exceptions\GeneralException;
-use App\Models\Auth\SocialAccount;
 use App\Models\Auth\User;
+use App\Models\Auth\SocialAccount;
+use App\Exceptions\GeneralException;
+use App\Events\Backend\Auth\User\UserSocialDeleted;
 
 /**
  * Class SocialRepository.
@@ -16,8 +16,8 @@ class SocialRepository
      * @param User        $user
      * @param SocialAccount $social
      *
-     * @throws GeneralException
      * @return bool
+     * @throws GeneralException
      */
     public function delete(User $user, SocialAccount $social)
     {

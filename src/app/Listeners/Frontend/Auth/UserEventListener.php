@@ -2,11 +2,7 @@
 
 namespace App\Listeners\Frontend\Auth;
 
-use App\Events\Frontend\Auth\UserConfirmed;
-use App\Events\Frontend\Auth\UserLoggedIn;
-use App\Events\Frontend\Auth\UserLoggedOut;
-use App\Events\Frontend\Auth\UserProviderRegistered;
-use App\Events\Frontend\Auth\UserRegistered;
+use Carbon\Carbon;
 
 /**
  * Class UserEventListener.
@@ -22,7 +18,7 @@ class UserEventListener
 
         // Update the logging in users time & IP
         $event->user->fill([
-            'last_login_at' => now()->toDateTimeString(),
+            'last_login_at' => Carbon::now()->toDateTimeString(),
             'last_login_ip' => $ip_address,
         ]);
 
@@ -38,7 +34,7 @@ class UserEventListener
 
         $event->user->save();
 
-        logger('User Logged In: '.$event->user->full_name);
+        \Log::info('User Logged In: '.$event->user->full_name);
     }
 
     /**
@@ -46,7 +42,7 @@ class UserEventListener
      */
     public function onLoggedOut($event)
     {
-        logger('User Logged Out: '.$event->user->full_name);
+        \Log::info('User Logged Out: '.$event->user->full_name);
     }
 
     /**
@@ -54,7 +50,7 @@ class UserEventListener
      */
     public function onRegistered($event)
     {
-        logger('User Registered: '.$event->user->full_name);
+        \Log::info('User Registered: '.$event->user->full_name);
     }
 
     /**
@@ -62,7 +58,7 @@ class UserEventListener
      */
     public function onProviderRegistered($event)
     {
-        logger('User Provider Registered: '.$event->user->full_name);
+        \Log::info('User Provider Registered: '.$event->user->full_name);
     }
 
     /**
@@ -70,7 +66,7 @@ class UserEventListener
      */
     public function onConfirmed($event)
     {
-        logger('User Confirmed: '.$event->user->full_name);
+        \Log::info('User Confirmed: '.$event->user->full_name);
     }
 
     /**
@@ -81,27 +77,27 @@ class UserEventListener
     public function subscribe($events)
     {
         $events->listen(
-            UserLoggedIn::class,
+            \App\Events\Frontend\Auth\UserLoggedIn::class,
             'App\Listeners\Frontend\Auth\UserEventListener@onLoggedIn'
         );
 
         $events->listen(
-            UserLoggedOut::class,
+            \App\Events\Frontend\Auth\UserLoggedOut::class,
             'App\Listeners\Frontend\Auth\UserEventListener@onLoggedOut'
         );
 
         $events->listen(
-            UserRegistered::class,
+            \App\Events\Frontend\Auth\UserRegistered::class,
             'App\Listeners\Frontend\Auth\UserEventListener@onRegistered'
         );
 
         $events->listen(
-            UserProviderRegistered::class,
+            \App\Events\Frontend\Auth\UserProviderRegistered::class,
             'App\Listeners\Frontend\Auth\UserEventListener@onProviderRegistered'
         );
 
         $events->listen(
-            UserConfirmed::class,
+            \App\Events\Frontend\Auth\UserConfirmed::class,
             'App\Listeners\Frontend\Auth\UserEventListener@onConfirmed'
         );
     }

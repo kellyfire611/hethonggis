@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Frontend\User;
 
-use App\Helpers\Auth\SocialiteHelper;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Helpers\Frontend\Auth\Socialite;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class UpdateProfileRequest.
@@ -29,11 +29,11 @@ class UpdateProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => ['required'],
-            'last_name' => ['required'],
-            'email' => ['sometimes', 'required', 'email'],
-            'avatar_type' => ['required', Rule::in(array_merge(['gravatar', 'storage'], (new SocialiteHelper)->getAcceptedProviders()))],
-            'avatar_location' => ['sometimes', 'image'],
+            'first_name'  => ['required', 'max:191'],
+            'last_name'  => ['required', 'max:191'],
+            'email' => ['sometimes', 'required', 'email', 'max:191'],
+            'avatar_type' => ['required', 'max:191', Rule::in(array_merge(['gravatar', 'storage'], (new Socialite)->getAcceptedProviders()))],
+            'avatar_location' => ['sometimes', 'image', 'max:191'],
         ];
     }
 }

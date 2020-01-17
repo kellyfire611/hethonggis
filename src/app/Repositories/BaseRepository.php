@@ -2,10 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\GeneralException;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * Class BaseRepository.
- *
- * Modified from: https://github.com/kylenoland/laravel-base-repository
  */
 abstract class BaseRepository implements RepositoryContract
 {
@@ -66,15 +68,47 @@ abstract class BaseRepository implements RepositoryContract
     protected $scopes = [];
 
     /**
+     * BaseRepository constructor.
+     */
+    public function __construct()
+    {
+        $this->makeModel();
+    }
+
+    /**
+     * Specify Model class name.
+     *
+     * @return mixed
+     */
+    abstract public function model();
+
+    /**
+     * @return Model|mixed
+     * @throws GeneralException
+     */
+    public function makeModel()
+    {
+        $model = app()->make($this->model());
+
+        if (! $model instanceof Model) {
+            throw new GeneralException("Class {$this->model()} must be an instance of ".Model::class);
+        }
+
+        return $this->model = $model;
+    }
+
+    /**
      * Get all the model records in the database.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @param array $columns
+     *
+     * @return Collection|static[]
      */
-    public function all()
+    public function all(array $columns = ['*'])
     {
         $this->newQuery()->eagerLoad();
 
-        $models = $this->query->get();
+        $models = $this->query->get($columns);
 
         $this->unsetClauses();
 
@@ -86,21 +120,98 @@ abstract class BaseRepository implements RepositoryContract
      *
      * @return int
      */
-    public function count()
+    public function count() : int
     {
         return $this->get()->count();
     }
 
     /**
-     * Get the first specified model record from the database.
+     * Create a new model record in the database.
+     *
+     * @param array $data
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function first()
+    public function create(array $data)
+    {
+        $this->unsetClauses();
+
+        return $this->model->create($data);
+    }
+
+    /**
+     * Create one or more new model records in the database.
+     *
+     * @param array $data
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function createMultiple(array $data)
+    {
+        $models = new Collection();
+
+        foreach ($data as $d) {
+            $models->push($this->create($d));
+        }
+
+        return $models;
+    }
+
+    /**
+     * Delete one or more model records from the database.
+     *
+     * @return mixed
+     */
+    public function delete()
+    {
+        $this->newQuery()->setClauses()->setScopes();
+
+        $result = $this->query->delete();
+
+        $this->unsetClauses();
+
+        return $result;
+    }
+
+    /**
+     * Delete the specified model record from the database.
+     *
+     * @param $id
+     *
+     * @return bool|null
+     * @throws \Exception
+     */
+    public function deleteById($id) : bool
+    {
+        $this->unsetClauses();
+
+        return $this->getById($id)->delete();
+    }
+
+    /**
+     * Delete multiple records.
+     *
+     * @param array $ids
+     *
+     * @return int
+     */
+    public function deleteMultipleById(array $ids) : int
+    {
+        return $this->model->destroy($ids);
+    }
+
+    /**
+     * Get the first specified model record from the database.
+     *
+     * @param array $columns
+     *
+     * @return Model|static
+     */
+    public function first(array $columns = ['*'])
     {
         $this->newQuery()->eagerLoad()->setClauses()->setScopes();
 
-        $model = $this->query->firstOrFail();
+        $model = $this->query->firstOrFail($columns);
 
         $this->unsetClauses();
 
@@ -110,13 +221,15 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Get all the specified model records in the database.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @param array $columns
+     *
+     * @return Collection|static[]
      */
-    public function get()
+    public function get(array $columns = ['*'])
     {
         $this->newQuery()->eagerLoad()->setClauses()->setScopes();
 
-        $models = $this->query->get();
+        $models = $this->query->get($columns);
 
         $this->unsetClauses();
 
@@ -126,25 +239,26 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * Get the specified model record from the database.
      *
-     * @param $id
+     * @param       $id
+     * @param array $columns
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return Collection|Model
      */
-    public function getById($id)
+    public function getById($id, array $columns = ['*'])
     {
         $this->unsetClauses();
 
         $this->newQuery()->eagerLoad();
 
-        return $this->query->findOrFail($id);
+        return $this->query->findOrFail($id, $columns);
     }
 
     /**
-     * @param $item
-     * @param $column
-     * @param  array  $columns
+     * @param       $item
+     * @param       $column
+     * @param array $columns
      *
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     * @return Model|null|static
      */
     public function getByColumn($item, $column, array $columns = ['*'])
     {
@@ -156,18 +270,42 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
-     * Delete the specified model record from the database.
+     * @param int    $limit
+     * @param array  $columns
+     * @param string $pageName
+     * @param null   $page
      *
-     * @param $id
-     *
-     * @return bool|null
-     * @throws \Exception
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function deleteById($id)
+    public function paginate($limit = 25, array $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        $this->newQuery()->eagerLoad()->setClauses()->setScopes();
+
+        $models = $this->query->paginate($limit, $columns, $pageName, $page);
+
+        $this->unsetClauses();
+
+        return $models;
+    }
+
+    /**
+     * Update the specified model record in the database.
+     *
+     * @param       $id
+     * @param array $data
+     * @param array $options
+     *
+     * @return Collection|Model
+     */
+    public function updateById($id, array $data, array $options = [])
     {
         $this->unsetClauses();
 
-        return $this->getById($id)->delete();
+        $model = $this->getById($id);
+
+        $model->update($data, $options);
+
+        return $model;
     }
 
     /**
@@ -196,25 +334,6 @@ abstract class BaseRepository implements RepositoryContract
         $this->orderBys[] = compact('column', 'direction');
 
         return $this;
-    }
-
-    /**
-     * @param int    $limit
-     * @param array  $columns
-     * @param string $pageName
-     * @param null   $page
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function paginate($limit = 25, array $columns = ['*'], $pageName = 'page', $page = null)
-    {
-        $this->newQuery()->eagerLoad()->setClauses()->setScopes();
-
-        $models = $this->query->paginate($limit, $columns, $pageName, $page);
-
-        $this->unsetClauses();
-
-        return $models;
     }
 
     /**
@@ -328,7 +447,7 @@ abstract class BaseRepository implements RepositoryContract
     protected function setScopes()
     {
         foreach ($this->scopes as $method => $args) {
-            $this->query->$method(implode(', ', $args));
+            $this->query->$method(...$args);
         }
 
         return $this;
@@ -345,6 +464,21 @@ abstract class BaseRepository implements RepositoryContract
         $this->whereIns = [];
         $this->scopes = [];
         $this->take = null;
+
+        return $this;
+    }
+
+    /**
+     * Add the given query scope.
+     *
+     * @param string $scope
+     * @param array $args
+     *
+     * @return $this
+     */
+    public function __call($scope, $args)
+    {
+        $this->scopes[$scope] = $args;
 
         return $this;
     }

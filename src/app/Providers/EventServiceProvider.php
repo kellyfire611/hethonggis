@@ -24,35 +24,35 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
-        // Frontend Subscribers
+        /*
+         * Frontend Subscribers
+         */
 
-        // Auth Subscribers
+        /*
+         * Auth Subscribers
+         */
         \App\Listeners\Frontend\Auth\UserEventListener::class,
 
-        // Backend Subscribers
+        /*
+         * Backend Subscribers
+         */
 
-        // Auth Subscribers
+        /*
+         * Auth Subscribers
+         */
         \App\Listeners\Backend\Auth\User\UserEventListener::class,
         \App\Listeners\Backend\Auth\Role\RoleEventListener::class,
     ];
 
     /**
      * Register any events for your application.
+     *
+     * @return void
      */
     public function boot()
     {
         parent::boot();
 
         //
-    }
-
-    /**
-     * Determine if events and listeners should be automatically discovered.
-     *
-     * @return bool
-     */
-    public function shouldDiscoverEvents()
-    {
-        return false;
     }
 }

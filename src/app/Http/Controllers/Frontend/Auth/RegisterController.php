@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Frontend\Auth;
 
-use App\Events\Frontend\Auth\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
-use App\Repositories\Frontend\Auth\UserRepository;
+use App\Helpers\Frontend\Auth\Socialite;
+use App\Events\Frontend\Auth\UserRegistered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Repositories\Frontend\Auth\UserRepository;
 
 /**
  * Class RegisterController.
@@ -49,14 +50,15 @@ class RegisterController extends Controller
     {
         abort_unless(config('access.registration'), 404);
 
-        return view('frontend.auth.register');
+        return view('frontend.auth.register')
+            ->withSocialiteLinks((new Socialite)->getSocialLinks());
     }
 
     /**
      * @param RegisterRequest $request
      *
-     * @throws \Throwable
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Throwable
      */
     public function register(RegisterRequest $request)
     {
@@ -74,12 +76,12 @@ class RegisterController extends Controller
                     __('exceptions.frontend.auth.confirmation.created_pending') :
                     __('exceptions.frontend.auth.confirmation.created_confirm')
             );
+        } else {
+            auth()->login($user);
+
+            event(new UserRegistered($user));
+
+            return redirect($this->redirectPath());
         }
-
-        auth()->login($user);
-
-        event(new UserRegistered($user));
-
-        return redirect($this->redirectPath());
     }
 }

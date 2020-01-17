@@ -2,17 +2,18 @@
 
 namespace App\Repositories\Frontend\Auth;
 
-use App\Events\Frontend\Auth\UserConfirmed;
-use App\Events\Frontend\Auth\UserProviderRegistered;
-use App\Exceptions\GeneralException;
-use App\Models\Auth\SocialAccount;
+use Carbon\Carbon;
 use App\Models\Auth\User;
-use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
-use App\Repositories\BaseRepository;
 use Illuminate\Http\UploadedFile;
+use App\Models\Auth\SocialAccount;
 use Illuminate\Support\Facades\DB;
+use App\Exceptions\GeneralException;
+use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Events\Frontend\Auth\UserConfirmed;
+use App\Events\Frontend\Auth\UserProviderRegistered;
+use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
 
 /**
  * Class UserRepository.
@@ -20,13 +21,11 @@ use Illuminate\Support\Facades\Storage;
 class UserRepository extends BaseRepository
 {
     /**
-     * UserRepository constructor.
-     *
-     * @param  User  $model
+     * @return string
      */
-    public function __construct(User $model)
+    public function model()
     {
-        $this->model = $model;
+        return User::class;
     }
 
     /**
@@ -48,8 +47,8 @@ class UserRepository extends BaseRepository
     /**
      * @param $uuid
      *
-     * @throws GeneralException
      * @return mixed
+     * @throws GeneralException
      */
     public function findByUuid($uuid)
     {
@@ -67,8 +66,8 @@ class UserRepository extends BaseRepository
     /**
      * @param $code
      *
-     * @throws GeneralException
      * @return mixed
+     * @throws GeneralException
      */
     public function findByConfirmationCode($code)
     {
@@ -86,26 +85,27 @@ class UserRepository extends BaseRepository
     /**
      * @param array $data
      *
+     * @return \Illuminate\Database\Eloquent\Model|mixed
      * @throws \Exception
      * @throws \Throwable
-     * @return \Illuminate\Database\Eloquent\Model|mixed
      */
     public function create(array $data)
     {
-        return DB::transaction(function () use ($data) {
-            $user = $this->model::create([
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name'],
-                'email' => $data['email'],
+            $user = parent::create([
+                'first_name'        => $data['first_name'],
+                'last_name'         => $data['last_name'],
+                'email'             => $data['email'],
                 'confirmation_code' => md5(uniqid(mt_rand(), true)),
-                'active' => true,
-                'password' => $data['password'],
-                // If users require approval or needs to confirm email
-                'confirmed' => ! (config('access.users.requires_approval') || config('access.users.confirm_email')),
+                'active'            => 1,
+                'password'          => $data['password'],
+                                    // If users require approval or needs to confirm email
+                'confirmed'         => config('access.users.requires_approval') || config('access.users.confirm_email') ? 0 : 1,
             ]);
 
             if ($user) {
-                // Add the default site role to the new user
+                /*
+                 * Add the default site role to the new user
+                 */
                 $user->assignRole(config('access.users.default_role'));
             }
 
@@ -121,9 +121,10 @@ class UserRepository extends BaseRepository
                 $user->notify(new UserNeedsConfirmation($user->confirmation_code));
             }
 
-            // Return the user object
+            /*
+             * Return the user object
+             */
             return $user;
-        });
     }
 
     /**
@@ -131,8 +132,8 @@ class UserRepository extends BaseRepository
      * @param array $input
      * @param bool|UploadedFile  $image
      *
-     * @throws GeneralException
      * @return array|bool
+     * @throws GeneralException
      */
     public function update($id, array $input, $image = false)
     {
@@ -146,14 +147,14 @@ class UserRepository extends BaseRepository
             $user->avatar_location = $image->store('/avatars', 'public');
         } else {
             // No image being passed
-            if ($input['avatar_type'] === 'storage') {
+            if ($input['avatar_type'] == 'storage') {
                 // If there is no existing image
-                if (auth()->user()->avatar_location === '') {
+                if (! strlen(auth()->user()->avatar_location)) {
                     throw new GeneralException('You must supply a profile image.');
                 }
             } else {
                 // If there is a current image, and they are not using it anymore, get rid of it
-                if (auth()->user()->avatar_location !== '') {
+                if (strlen(auth()->user()->avatar_location)) {
                     Storage::disk('public')->delete(auth()->user()->avatar_location);
                 }
 
@@ -163,7 +164,7 @@ class UserRepository extends BaseRepository
 
         if ($user->canChangeEmail()) {
             //Address is not current address so they need to reconfirm
-            if ($user->email !== $input['email']) {
+            if ($user->email != $input['email']) {
                 //Emails have to be unique
                 if ($this->getByColumn($input['email'], 'email')) {
                     throw new GeneralException(__('exceptions.frontend.auth.email_taken'));
@@ -172,7 +173,7 @@ class UserRepository extends BaseRepository
                 // Force the user to re-verify his email address if config is set
                 if (config('access.users.confirm_email')) {
                     $user->confirmation_code = md5(uniqid(mt_rand(), true));
-                    $user->confirmed = false;
+                    $user->confirmed = 0;
                     $user->notify(new UserNeedsConfirmation($user->confirmation_code));
                 }
                 $user->email = $input['email'];
@@ -194,8 +195,8 @@ class UserRepository extends BaseRepository
      * @param      $input
      * @param bool $expired
      *
-     * @throws GeneralException
      * @return bool
+     * @throws GeneralException
      */
     public function updatePassword($input, $expired = false)
     {
@@ -203,7 +204,7 @@ class UserRepository extends BaseRepository
 
         if (Hash::check($input['old_password'], $user->password)) {
             if ($expired) {
-                $user->password_changed_at = now()->toDateTimeString();
+                $user->password_changed_at = Carbon::now()->toDateTimeString();
             }
 
             return $user->update(['password' => $input['password']]);
@@ -215,19 +216,19 @@ class UserRepository extends BaseRepository
     /**
      * @param $code
      *
-     * @throws GeneralException
      * @return bool
+     * @throws GeneralException
      */
     public function confirm($code)
     {
         $user = $this->findByConfirmationCode($code);
 
-        if ($user->confirmed === true) {
+        if ($user->confirmed == 1) {
             throw new GeneralException(__('exceptions.frontend.auth.confirmation.already_confirmed'));
         }
 
-        if ($user->confirmation_code === $code) {
-            $user->confirmed = true;
+        if ($user->confirmation_code == $code) {
+            $user->confirmed = 1;
 
             event(new UserConfirmed($user));
 
@@ -241,8 +242,8 @@ class UserRepository extends BaseRepository
      * @param $data
      * @param $provider
      *
-     * @throws GeneralException
      * @return mixed
+     * @throws GeneralException
      */
     public function findOrCreateProvider($data, $provider)
     {
@@ -266,20 +267,15 @@ class UserRepository extends BaseRepository
             // Get users first name and last name from their full name
             $nameParts = $this->getNameParts($data->getName());
 
-            $user = $this->model::create([
-                'first_name' => $nameParts['first_name'],
-                'last_name' => $nameParts['last_name'],
+            $user = parent::create([
+                'first_name'  => $nameParts['first_name'],
+                'last_name'  => $nameParts['last_name'],
                 'email' => $user_email,
-                'active' => true,
-                'confirmed' => true,
+                'active' => 1,
+                'confirmed' => 1,
                 'password' => null,
                 'avatar_type' => $provider,
             ]);
-
-            if ($user) {
-                // Add the default site role to the new user
-                $user->assignRole(config('access.users.default_role'));
-            }
 
             event(new UserProviderRegistered($user));
         }
@@ -288,16 +284,16 @@ class UserRepository extends BaseRepository
         if (! $user->hasProvider($provider)) {
             // Gather the provider data for saving and associate it with the user
             $user->providers()->save(new SocialAccount([
-                'provider' => $provider,
+                'provider'    => $provider,
                 'provider_id' => $data->id,
-                'token' => $data->token,
-                'avatar' => $data->avatar,
+                'token'       => $data->token,
+                'avatar'      => $data->avatar,
             ]));
         } else {
             // Update the users information, token and avatar can be updated.
             $user->providers()->update([
-                'token' => $data->token,
-                'avatar' => $data->avatar,
+                'token'       => $data->token,
+                'avatar'      => $data->avatar,
             ]);
 
             $user->avatar_type = $provider;
@@ -324,7 +320,7 @@ class UserRepository extends BaseRepository
             $result['last_name'] = null;
         }
 
-        if (! empty($parts) && $size === 1) {
+        if (! empty($parts) && $size == 1) {
             $result['first_name'] = $parts[0];
             $result['last_name'] = null;
         }

@@ -13,7 +13,7 @@ trait UserScope
      *
      * @return mixed
      */
-    public function scopeConfirmed($query, $confirmed = true)
+    public function scopeConfirmed($query, $confirmed = 1)
     {
         return $query->where('confirmed', $confirmed);
     }
@@ -24,7 +24,7 @@ trait UserScope
      *
      * @return mixed
      */
-    public function scopeActive($query, $status = true)
+    public function scopeActive($query, $status = 1)
     {
         return $query->where('active', $status);
     }

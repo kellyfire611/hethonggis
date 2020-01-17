@@ -2,22 +2,22 @@
 
 namespace App\Repositories\Backend\Auth;
 
-use App\Events\Backend\Auth\User\UserConfirmed;
-use App\Events\Backend\Auth\User\UserCreated;
-use App\Events\Backend\Auth\User\UserDeactivated;
-use App\Events\Backend\Auth\User\UserPasswordChanged;
-use App\Events\Backend\Auth\User\UserPermanentlyDeleted;
-use App\Events\Backend\Auth\User\UserReactivated;
-use App\Events\Backend\Auth\User\UserRestored;
-use App\Events\Backend\Auth\User\UserUnconfirmed;
-use App\Events\Backend\Auth\User\UserUpdated;
-use App\Exceptions\GeneralException;
 use App\Models\Auth\User;
-use App\Notifications\Backend\Auth\UserAccountActive;
-use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
-use App\Repositories\BaseRepository;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use App\Exceptions\GeneralException;
+use App\Repositories\BaseRepository;
+use App\Events\Backend\Auth\User\UserCreated;
+use App\Events\Backend\Auth\User\UserUpdated;
+use App\Events\Backend\Auth\User\UserRestored;
+use App\Events\Backend\Auth\User\UserConfirmed;
+use Illuminate\Pagination\LengthAwarePaginator;
+use App\Events\Backend\Auth\User\UserDeactivated;
+use App\Events\Backend\Auth\User\UserReactivated;
+use App\Events\Backend\Auth\User\UserUnconfirmed;
+use App\Events\Backend\Auth\User\UserPasswordChanged;
+use App\Notifications\Backend\Auth\UserAccountActive;
+use App\Events\Backend\Auth\User\UserPermanentlyDeleted;
+use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
 
 /**
  * Class UserRepository.
@@ -25,13 +25,11 @@ use Illuminate\Support\Facades\DB;
 class UserRepository extends BaseRepository
 {
     /**
-     * UserRepository constructor.
-     *
-     * @param  User  $model
+     * @return string
      */
-    public function __construct(User $model)
+    public function model()
     {
-        $this->model = $model;
+        return User::class;
     }
 
     /**
@@ -40,7 +38,7 @@ class UserRepository extends BaseRepository
     public function getUnconfirmedCount() : int
     {
         return $this->model
-            ->where('confirmed', false)
+            ->where('confirmed', 0)
             ->count();
     }
 
@@ -53,11 +51,12 @@ class UserRepository extends BaseRepository
      */
     public function getActivePaginated($paged = 25, $orderBy = 'created_at', $sort = 'desc') : LengthAwarePaginator
     {
-        return $this->model
+        $result = $this->model
             ->with('roles', 'permissions', 'providers')
             ->active()
             ->orderBy($orderBy, $sort)
             ->paginate($paged);
+        return $result;
     }
 
     /**
@@ -95,21 +94,20 @@ class UserRepository extends BaseRepository
     /**
      * @param array $data
      *
+     * @return User
      * @throws \Exception
      * @throws \Throwable
-     * @return User
      */
     public function create(array $data) : User
     {
-        return DB::transaction(function () use ($data) {
-            $user = $this->model::create([
+            $user = parent::create([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
                 'email' => $data['email'],
                 'password' => $data['password'],
-                'active' => isset($data['active']) && $data['active'] === '1',
+                'active' => isset($data['active']) && $data['active'] == '1' ? 1 : 0,
                 'confirmation_code' => md5(uniqid(mt_rand(), true)),
-                'confirmed' => isset($data['confirmed']) && $data['confirmed'] === '1',
+                'confirmed' => isset($data['confirmed']) && $data['confirmed'] == '1' ? 1 : 0,
             ]);
 
             // See if adding any additional permissions
@@ -128,7 +126,7 @@ class UserRepository extends BaseRepository
                 $user->syncPermissions($data['permissions']);
 
                 //Send confirmation email if requested and account approval is off
-                if ($user->confirmed === false && isset($data['confirmation_email']) && ! config('access.users.requires_approval')) {
+                if (isset($data['confirmation_email']) && $user->confirmed == 0 && ! config('access.users.requires_approval')) {
                     $user->notify(new UserNeedsConfirmation($user->confirmation_code));
                 }
 
@@ -138,17 +136,16 @@ class UserRepository extends BaseRepository
             }
 
             throw new GeneralException(__('exceptions.backend.access.users.create_error'));
-        });
     }
 
     /**
      * @param User  $user
      * @param array $data
      *
+     * @return User
      * @throws GeneralException
      * @throws \Exception
      * @throws \Throwable
-     * @return User
      */
     public function update(User $user, array $data) : User
     {
@@ -159,7 +156,6 @@ class UserRepository extends BaseRepository
             $data['permissions'] = [];
         }
 
-        return DB::transaction(function () use ($user, $data) {
             if ($user->update([
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
@@ -175,15 +171,14 @@ class UserRepository extends BaseRepository
             }
 
             throw new GeneralException(__('exceptions.backend.access.users.update_error'));
-        });
     }
 
     /**
      * @param User $user
      * @param      $input
      *
-     * @throws GeneralException
      * @return User
+     * @throws GeneralException
      */
     public function updatePassword(User $user, $input) : User
     {
@@ -200,12 +195,12 @@ class UserRepository extends BaseRepository
      * @param User $user
      * @param      $status
      *
-     * @throws GeneralException
      * @return User
+     * @throws GeneralException
      */
     public function mark(User $user, $status) : User
     {
-        if ($status === 0 && auth()->id() === $user->id) {
+        if (auth()->id() == $user->id && $status == 0) {
             throw new GeneralException(__('exceptions.backend.access.users.cant_deactivate_self'));
         }
 
@@ -215,6 +210,7 @@ class UserRepository extends BaseRepository
             case 0:
                 event(new UserDeactivated($user));
             break;
+
             case 1:
                 event(new UserReactivated($user));
             break;
@@ -230,8 +226,8 @@ class UserRepository extends BaseRepository
     /**
      * @param User $user
      *
-     * @throws GeneralException
      * @return User
+     * @throws GeneralException
      */
     public function confirm(User $user) : User
     {
@@ -239,7 +235,7 @@ class UserRepository extends BaseRepository
             throw new GeneralException(__('exceptions.backend.access.users.already_confirmed'));
         }
 
-        $user->confirmed = true;
+        $user->confirmed = 1;
         $confirmed = $user->save();
 
         if ($confirmed) {
@@ -259,8 +255,8 @@ class UserRepository extends BaseRepository
     /**
      * @param User $user
      *
-     * @throws GeneralException
      * @return User
+     * @throws GeneralException
      */
     public function unconfirm(User $user) : User
     {
@@ -268,17 +264,17 @@ class UserRepository extends BaseRepository
             throw new GeneralException(__('exceptions.backend.access.users.not_confirmed'));
         }
 
-        if ($user->id === 1) {
+        if ($user->id == 1) {
             // Cant un-confirm admin
             throw new GeneralException(__('exceptions.backend.access.users.cant_unconfirm_admin'));
         }
 
-        if ($user->id === auth()->id()) {
+        if ($user->id == auth()->id()) {
             // Cant un-confirm self
             throw new GeneralException(__('exceptions.backend.access.users.cant_unconfirm_self'));
         }
 
-        $user->confirmed = false;
+        $user->confirmed = 0;
         $unconfirmed = $user->save();
 
         if ($unconfirmed) {
@@ -293,21 +289,21 @@ class UserRepository extends BaseRepository
     /**
      * @param User $user
      *
+     * @return User
      * @throws GeneralException
      * @throws \Exception
      * @throws \Throwable
-     * @return User
      */
     public function forceDelete(User $user) : User
     {
-        if ($user->deleted_at === null) {
+        if (is_null($user->deleted_at)) {
             throw new GeneralException(__('exceptions.backend.access.users.delete_first'));
         }
 
-        return DB::transaction(function () use ($user) {
             // Delete associated relationships
             $user->passwordHistories()->delete();
             $user->providers()->delete();
+            $user->sessions()->delete();
 
             if ($user->forceDelete()) {
                 event(new UserPermanentlyDeleted($user));
@@ -316,18 +312,17 @@ class UserRepository extends BaseRepository
             }
 
             throw new GeneralException(__('exceptions.backend.access.users.delete_error'));
-        });
     }
 
     /**
      * @param User $user
      *
-     * @throws GeneralException
      * @return User
+     * @throws GeneralException
      */
     public function restore(User $user) : User
     {
-        if ($user->deleted_at === null) {
+        if (is_null($user->deleted_at)) {
             throw new GeneralException(__('exceptions.backend.access.users.cant_restore'));
         }
 
@@ -348,9 +343,12 @@ class UserRepository extends BaseRepository
      */
     protected function checkUserByEmail(User $user, $email)
     {
-        // Figure out if email is not the same and check to see if email exists
-        if ($user->email !== $email && $this->model->where('email', '=', $email)->first()) {
-            throw new GeneralException(trans('exceptions.backend.access.users.email_error'));
+        //Figure out if email is not the same
+        if ($user->email != $email) {
+            //Check to see if email exists
+            if ($this->model->where('email', '=', $email)->first()) {
+                throw new GeneralException(trans('exceptions.backend.access.users.email_error'));
+            }
         }
     }
 }

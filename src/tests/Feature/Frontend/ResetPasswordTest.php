@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Frontend;
 
+use Tests\TestCase;
 use App\Models\Auth\User;
-use App\Notifications\Frontend\Auth\UserNeedsPasswordReset;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Notifications\Frontend\Auth\UserNeedsPasswordReset;
 
 class ResetPasswordTest extends TestCase
 {
@@ -74,13 +74,13 @@ class ResetPasswordTest extends TestCase
 
         $response = $this->followingRedirects()
             ->post('password/reset', [
-                'token' => $token,
-                'email' => 'john@example.com',
-                'password' => 'secret',
-                'password_confirmation' => 'secret',
-            ]);
+            'token' => $token,
+            'email' => 'john@example.com',
+            'password' => 'secret',
+            'password_confirmation' => 'secret',
+        ]);
 
-        $this->assertStringContainsString('The password must be at least 8 characters.', $response->content());
+        $this->assertContains(__('auth.password_rules'), $response->content());
     }
 
     /** @test */
@@ -131,7 +131,7 @@ class ResetPasswordTest extends TestCase
 
         $response->assertSessionHasErrors();
         $errors = session('errors');
-        $this->assertSame($errors->get('password')[0], __('auth.password_used'));
+        $this->assertEquals($errors->get('password')[0], __('auth.password_used'));
         $this->assertTrue(Hash::check(':ZqD~57}1t', $user->fresh()->password));
     }
 }

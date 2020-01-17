@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Auth\User;
 use Faker\Generator;
+use Webpatser\Uuid\Uuid;
+use App\Models\Auth\User;
 use Illuminate\Support\Str;
-use Ramsey\Uuid\Uuid;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,45 +18,46 @@ use Ramsey\Uuid\Uuid;
 
 $factory->define(User::class, function (Generator $faker) {
     return [
-        'uuid' => Uuid::uuid4()->toString(),
-        'first_name' => $faker->firstName,
-        'last_name' => $faker->lastName,
-        'email' => $faker->unique()->safeEmail,
-        'password' => 'secret',
+        'uuid' 			    => Uuid::generate(4)->string,
+        'first_name'        => $faker->firstName,
+        'last_name'         => $faker->lastName,
+        'email'             => $faker->safeEmail,
+        //'email_verified_at' => now(),
+        'password'          => 'secret',
         'password_changed_at' => null,
-        'remember_token' => Str::random(10),
+        'remember_token'    => Str::random(10),
         'confirmation_code' => md5(uniqid(mt_rand(), true)),
-        'active' => true,
-        'confirmed' => true,
+        'active' => 1,
+        'confirmed' => 1,
     ];
 });
 
 $factory->state(User::class, 'active', function () {
     return [
-        'active' => true,
+        'active' => 1,
     ];
 });
 
 $factory->state(User::class, 'inactive', function () {
     return [
-        'active' => false,
+        'active' => 0,
     ];
 });
 
 $factory->state(User::class, 'confirmed', function () {
     return [
-        'confirmed' => true,
+        'confirmed' => 1,
     ];
 });
 
 $factory->state(User::class, 'unconfirmed', function () {
     return [
-        'confirmed' => false,
+        'confirmed' => 0,
     ];
 });
 
 $factory->state(User::class, 'softDeleted', function () {
     return [
-        'deleted_at' => now(),
+        'deleted_at' => \Illuminate\Support\Carbon::now(),
     ];
 });

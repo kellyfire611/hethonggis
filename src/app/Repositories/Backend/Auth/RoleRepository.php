@@ -2,12 +2,12 @@
 
 namespace App\Repositories\Backend\Auth;
 
+use App\Models\Auth\Role;
+use Illuminate\Support\Facades\DB;
+use App\Exceptions\GeneralException;
+use App\Repositories\BaseRepository;
 use App\Events\Backend\Auth\Role\RoleCreated;
 use App\Events\Backend\Auth\Role\RoleUpdated;
-use App\Exceptions\GeneralException;
-use App\Models\Auth\Role;
-use App\Repositories\BaseRepository;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class RoleRepository.
@@ -15,27 +15,24 @@ use Illuminate\Support\Facades\DB;
 class RoleRepository extends BaseRepository
 {
     /**
-     * RoleRepository constructor.
-     *
-     * @param  Role  $model
+     * @return string
      */
-    public function __construct(Role $model)
+    public function model()
     {
-        $this->model = $model;
+        return Role::class;
     }
 
     /**
      * @param array $data
      *
-     * @throws GeneralException
-     * @throws \Throwable
      * @return Role
+     * @throws GeneralException
      */
     public function create(array $data) : Role
     {
         // Make sure it doesn't already exist
         if ($this->roleExists($data['name'])) {
-            throw new GeneralException('A role already exists with the name '.e($data['name']));
+            throw new GeneralException('A role already exists with the name '.$data['name']);
         }
 
         if (! isset($data['permissions']) || ! \count($data['permissions'])) {
@@ -47,8 +44,7 @@ class RoleRepository extends BaseRepository
             throw new GeneralException(__('exceptions.backend.access.roles.needs_permission'));
         }
 
-        return DB::transaction(function () use ($data) {
-            $role = $this->model::create(['name' => strtolower($data['name'])]);
+            $role = parent::create(['name' => strtolower($data['name'])]);
 
             if ($role) {
                 $role->givePermissionTo($data['permissions']);
@@ -59,16 +55,14 @@ class RoleRepository extends BaseRepository
             }
 
             throw new GeneralException(trans('exceptions.backend.access.roles.create_error'));
-        });
     }
 
     /**
      * @param Role  $role
      * @param array $data
      *
-     * @throws GeneralException
-     * @throws \Throwable
      * @return mixed
+     * @throws GeneralException
      */
     public function update(Role $role, array $data)
     {
@@ -92,7 +86,6 @@ class RoleRepository extends BaseRepository
             throw new GeneralException(__('exceptions.backend.access.roles.needs_permission'));
         }
 
-        return DB::transaction(function () use ($role, $data) {
             if ($role->update([
                 'name' => strtolower($data['name']),
             ])) {
@@ -104,7 +97,6 @@ class RoleRepository extends BaseRepository
             }
 
             throw new GeneralException(trans('exceptions.backend.access.roles.update_error'));
-        });
     }
 
     /**
@@ -115,7 +107,7 @@ class RoleRepository extends BaseRepository
     protected function roleExists($name) : bool
     {
         return $this->model
-            ->where('name', strtolower($name))
-            ->count() > 0;
+                ->where('name', strtolower($name))
+                ->count() > 0;
     }
 }

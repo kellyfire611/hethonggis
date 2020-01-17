@@ -2,12 +2,12 @@
 
 namespace Tests\Backend\User;
 
+use Tests\TestCase;
+use App\Models\Auth\User;
+use Illuminate\Support\Facades\Event;
 use App\Events\Backend\Auth\User\UserDeactivated;
 use App\Events\Backend\Auth\User\UserReactivated;
-use App\Models\Auth\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
-use Tests\TestCase;
 
 class DeactivateUserTest extends TestCase
 {
@@ -32,7 +32,7 @@ class DeactivateUserTest extends TestCase
 
         $this->get("/admin/auth/user/{$user->id}/mark/0");
 
-        $this->assertSame(false, $user->fresh()->active);
+        $this->assertEquals(0, $user->fresh()->active);
         Event::assertDispatched(UserDeactivated::class);
     }
 
@@ -45,7 +45,7 @@ class DeactivateUserTest extends TestCase
 
         $this->get("/admin/auth/user/{$user->id}/mark/1");
 
-        $this->assertSame(true, $user->fresh()->active);
+        $this->assertEquals(1, $user->fresh()->active);
         Event::assertDispatched(UserReactivated::class);
     }
 
@@ -54,9 +54,7 @@ class DeactivateUserTest extends TestCase
     {
         $admin = $this->loginAsAdmin();
 
-        $response = $this
-            ->from('admin/auth/user')
-            ->get("/admin/auth/user/{$admin->id}/mark/0");
+        $response = $this->get("/admin/auth/user/{$admin->id}/mark/0");
 
         $response->assertSessionHas(['flash_danger' => __('exceptions.backend.access.users.cant_deactivate_self')]);
     }

@@ -2,18 +2,18 @@
 
 namespace Tests\Feature\Frontend;
 
-use App\Events\Frontend\Auth\UserConfirmed;
-use App\Events\Frontend\Auth\UserRegistered;
+use Tests\TestCase;
 use App\Models\Auth\Role;
 use App\Models\Auth\User;
-use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
-use App\Repositories\Backend\Auth\UserRepository;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Database\Eloquent\Model;
+use App\Events\Frontend\Auth\UserConfirmed;
+use App\Events\Frontend\Auth\UserRegistered;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use App\Repositories\Backend\Auth\UserRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
 
 class UserRegistrationTest extends TestCase
 {
@@ -32,8 +32,8 @@ class UserRegistrationTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john@example.com',
-            'password' => 'OC4Nzu270N!QBVi%U%qX',
-            'password_confirmation' => 'OC4Nzu270N!QBVi%U%qX',
+            'password' => 'password',
+            'password_confirmation' => 'password',
         ], $userData));
     }
 
@@ -57,14 +57,14 @@ class UserRegistrationTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john@example.com',
-            'password' => 'OC4Nzu270N!QBVi%U%qX',
-            'password_confirmation' => 'OC4Nzu270N!QBVi%U%qX',
+            'password' => 'password',
+            'password_confirmation' => 'password',
         ]);
 
-        $newUser = resolve(UserRepository::class)->where('email', 'john@example.com')->first();
-        $this->assertSame($newUser->first_name, 'John');
-        $this->assertSame($newUser->last_name, 'Doe');
-        $this->assertTrue(Hash::check('OC4Nzu270N!QBVi%U%qX', $newUser->password));
+        $newUser = (new UserRepository())->where('email', 'john@example.com')->first();
+        $this->assertEquals($newUser->first_name, 'John');
+        $this->assertEquals($newUser->last_name, 'Doe');
+        $this->assertTrue(Hash::check('password', $newUser->password));
     }
 
     /** @test */
@@ -74,7 +74,7 @@ class UserRegistrationTest extends TestCase
         Notification::fake();
 
         $this->registerUser(['email' => 'john@example.com']);
-        $user = resolve(UserRepository::class)->where('email', 'john@example.com')->first();
+        $user = (new UserRepository())->where('email', 'john@example.com')->first();
 
         Notification::assertSentTo($user, UserNeedsConfirmation::class);
     }
@@ -88,7 +88,7 @@ class UserRegistrationTest extends TestCase
         $response = $this->get('/account/confirm/'.$user->confirmation_code);
 
         $response->assertSessionHas(['flash_success' => __('exceptions.frontend.auth.confirmation.success')]);
-        $this->assertSame(true, $user->fresh()->confirmed);
+        $this->assertEquals(1, $user->fresh()->confirmed);
         Event::assertDispatched(UserConfirmed::class);
     }
 
@@ -114,7 +114,7 @@ class UserRegistrationTest extends TestCase
         $response = $this->registerUser();
         $response->assertSessionHas(['flash_success' => __('exceptions.frontend.auth.confirmation.created_pending')]);
 
-        $response = $this->post('/login', ['email' => 'john@example.com', 'password' => 'OC4Nzu270N!QBVi%U%qX']);
+        $response = $this->post('/login', ['email' => 'john@example.com', 'password' => 'password']);
 
         $response->assertSessionHas(['flash_danger' => __('exceptions.frontend.auth.confirmation.pending')]);
     }

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Frontend\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Frontend\User\UpdatePasswordRequest;
 use App\Repositories\Frontend\Auth\UserRepository;
+use App\Http\Requests\Frontend\User\UpdatePasswordRequest;
 
 /**
  * Class UpdatePasswordController.
@@ -29,8 +29,8 @@ class UpdatePasswordController extends Controller
     /**
      * @param UpdatePasswordRequest $request
      *
-     * @throws \App\Exceptions\GeneralException
      * @return mixed
+     * @throws \App\Exceptions\GeneralException
      */
     public function update(UpdatePasswordRequest $request)
     {
