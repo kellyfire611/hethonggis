@@ -89,6 +89,22 @@
 <!-- Các script dành cho thư viện ChartJS -->
 <script src="{{ asset('vendor/Chart.js/Chart.min.js') }}"></script>
 <script>
+    var dynamicColors = function() {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+    }
+
+    function poolColors(a) {
+        var pool = [];
+        for(i = 0; i < a; i++) {
+            pool.push(dynamicColors());
+        }
+        return pool;
+    }
+
+    
     $(document).ready(function() {
         var objChart;
         var $chartOfobjChart = document.getElementById("chartOfobjChart").getContext("2d");
@@ -119,8 +135,8 @@
                             labels: myLabels,
                             datasets: [{
                                 data: myData,
-                                borderColor: "#9ad0f5",
-                                backgroundColor: "#9ad0f5",
+                                borderColor: poolColors(myData.length),
+                                backgroundColor: poolColors(myData.length),
                                 borderWidth: 1
                             }]
                         },
