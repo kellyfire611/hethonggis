@@ -111,3 +111,8 @@ Breadcrumbs::for('admin.diadiem.edit', function ($trail, $id) {
     $trail->push('Sửa địa điểm', route('admin.diadiem.edit', $id));
 });
 
+// Báo cáo
+Breadcrumbs::for('admin.baocao.soluongdiemthamquan', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push('Số lượng Điểm tham quan', route('admin.baocao.soluongdiemthamquan'));
+});

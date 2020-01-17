@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\TimKiemController;
 use App\Http\Controllers\Backend\DiaDiemController;
 use App\Http\Controllers\Backend\PageController;
 use App\Http\Controllers\Backend\QuangCaoController;
+use App\Http\Controllers\Backend\BaoCaoController;
 
 /*
  * All route names are prefixed with 'admin.'.
@@ -50,3 +51,7 @@ Route::get('diadiem/{diadiem}/edit', [DiaDiemController::class, 'edit'])->name('
 Route::patch('diadiem/{diadiem}/', [DiaDiemController::class, 'update'])->name('diadiem.update');
 Route::delete('diadiem/{diadiem}/', [DiaDiemController::class, 'destroy'])->name('diadiem.destroy');
 
+
+// Route Báo cáo
+Route::get('baocao/soluongdiemthamquan', [BaoCaoController::class, 'index'])->name('baocao.soluongdiemthamquan');
+Route::get('baocao/soluongdiemthamquan/data', [BaoCaoController::class, 'soluongdiemthamquanData'])->name('baocao.soluongdiemthamquan.data');

@@ -78,7 +78,7 @@
                             <div class="progress-group">
                                 <div class="progress-group-header align-items-end">
                                 <i class="icon-globe progress-group-icon"></i>
-                                <div>{{ $diadiem->tendiadiem }}</div>
+                                <div>{!! $diadiem->tendiadiem !!}</div>
                                 <div class="ml-auto font-weight-bold mr-2">{{ $diadiem->diemtrungbinh }}</div>
                                 <div class="text-muted small">
                                     <input type="number" class="rating" value="{{ $diadiem->diemtrungbinh }}" data-step="1" data-size="xs" data-readonly="true" data-theme="krajee-svg" data-show-clear="false" data-show-caption="true" data-language="vi" />
