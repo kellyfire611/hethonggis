@@ -2,6 +2,15 @@
 
 @section('title', app_name() . ' | ' . __('strings.backend.dashboard.title'))
 
+@push('after-styles')
+<link rel="stylesheet" href="{{ asset('vendor/leaflet/leaflet.css') }}" />
+<style>
+  #mapid {
+        height: 500px;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="row">
     <div class="col-sm-6 col-lg-3">
@@ -70,7 +79,9 @@
 
                     <!-- Map -->
                     <div class="col col-md-12">
-
+                        <div id="preMap">
+                        <div id="mapid"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,6 +99,7 @@
 @push('after-scripts')
 <!-- Các script dành cho thư viện ChartJS -->
 <script src="{{ asset('vendor/Chart.js/Chart.min.js') }}"></script>
+<script src="{{ asset('vendor/leaflet/leaflet.js') }}"></script>
 <script>
     var dynamicColors = function() {
         var r = Math.floor(Math.random() * 255);
@@ -108,6 +120,7 @@
     $(document).ready(function() {
         var objChart;
         var $chartOfobjChart = document.getElementById("chartOfobjChart").getContext("2d");
+        var map;
         $("#btnLapBaoCao").click(function(e) {
             e.preventDefault();
             $.ajax({
@@ -117,7 +130,7 @@
                     idTinhThanh: $('#id_tinhThanh').val(),
                 },
                 success: function(response) {
-                    debugger;
+                    // debugger;
                     var myLabels = [];
                     var myData = [];
                     $(response.data).each(function() {
@@ -179,6 +192,52 @@
                             maintainAspectRatio: false,
                         }
                     });
+
+                    // Vẽ bản đồ Leaflet
+                    // initialize Leaflet
+                    if (map != undefined) { 
+                        map.remove(); 
+                        $("#mapid").html("");
+                        $("#preMap").empty();
+                        $( "<div id=\"mapid\" style=\"height: 500px;\"></div>" ).appendTo("#preMap");
+                    }
+                    
+                    map = L.map('mapid').setView([14.6001567840577, 108.397979736328], 13);
+                    
+                    
+
+
+                    // Setting custom icon
+                    var LeafIcon = L.Icon.extend({
+                        options: {
+                            shadowUrl: '{{ asset('vendor/leaflet/images/leaf-shadow.png') }}',
+                            iconSize:     [38, 95], // size of the icon
+                            shadowSize:   [50, 64], // size of the shadow
+                            iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                            shadowAnchor: [4, 62],  // the same for the shadow
+                            popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                        }
+                    });
+                    var greenIcon = new LeafIcon({iconUrl: '{{ asset('vendor/leaflet/images/leaf-green.png') }}'}),
+                        redIcon = new LeafIcon({iconUrl: '{{ asset('vendor/leaflet/images/leaf-red.png') }}'}),
+                        orangeIcon = new LeafIcon({iconUrl: '{{ asset('vendor/leaflet/images/leaf-orange.png') }}'});
+
+                    // add the OpenStreetMap tiles
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+                    }).addTo(map);
+
+                    // show the scale bar on the lower left corner
+                    L.control.scale().addTo(map);
+
+                    // Add tô màu vùng địa chính
+                    
+                    //var coords = [[53.02068,-1.177565],[53.02068,-1.177529],[53.01392,-1.184813],[52.9996,-1.179552],[52.98669,-1.18368],[52.97328,-1.174253],[52.96742,-1.190667],[52.95318,-1.191675],[52.94076,-1.182942],[52.92892,-1.168955],[52.91526,-1.160708],[52.90665,-1.141897],[52.90181,-1.120173],[52.89815,-1.097902],[52.88871,-1.079905],[52.88071,-1.059252],[52.86815,-1.046174],[52.85532,-1.034603],[52.84477,-1.018005],[52.83515,-0.9996923],[52.82819,-0.9809427],[52.82284,-0.9621247],[52.81105,-0.9472224],[52.8036,-0.927404],[52.79135,-0.9146115],[52.78048,-0.8994353],[52.76687,-0.8894613],[52.76664,-0.8708082],[52.76659,-0.8708736],[52.76835,-0.891149],[52.78214,-0.901139],[52.79285,-0.9176971],[52.80486,-0.9299843],[52.81324,-0.9498426],[52.82246,-0.9662115],[52.82805,-0.9852306],[52.83673,-1.002167],[52.84597,-1.020533],[52.85667,-1.036038],[52.86976,-1.047891],[52.88192,-1.062801],[52.89071,-1.082117],[52.89929,-1.101],[52.90192,-1.123934],[52.90753,-1.145736],[52.91771,-1.161882],[52.93171,-1.170847],[52.94221,-1.187391],[52.9559,-1.191321],[52.97015,-1.188462],[52.98193,-1.173294],[52.98943,-1.164274],[52.99965,-1.179563],[53.01413,-1.184821],[53.02061,-1.177719],[53.02074,-1.177584]];
+                    //var a = response.data.map;
+                    // debugger;
+
+                    var polygon = L.polygon(response.map, {fillColor: '#FF00FF'}).addTo(map);
                 }
             });
         });

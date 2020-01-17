@@ -92,10 +92,26 @@ class BaoCaoController extends Controller
 
         $data = DB::select($sql, $parameter);
 
+        // Get các tọa độ điểm POLYGON tỉnh thành
+        $sqlCoordinates = '
+            SELECT y, x FROM tinh_nodes WHERE shapeid = 20;
+        ';
+        $dataCoordinates = collect(DB::select($sqlCoordinates, $parameter));
+        // dd($dataCoordinates[0]->x);
+        $coordinates = $dataCoordinates->map(function ($event, $key) {
+            
+            return [ $event->y, $event->x ];
+            
+        })->values();
+        // dd($coordinates[0]);
+
+        // $data['map'] = $coordinates;//json_encode($coordinates);
+
         // JSON
         return response()->json(array(
             'code' => 200, 
             'data' => $data,
+            'map' => $coordinates
         ));
     }
 }
