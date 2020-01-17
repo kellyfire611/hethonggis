@@ -3,6 +3,8 @@
 @section('title', app_name() . ' | ' . __('navs.general.home'))
 
 @push('after-styles')
+<link rel="stylesheet" href="{{ asset('vendor/leaflet/leaflet.css') }}" />
+
 <style>
     #map {
         height: 100%;
@@ -13,6 +15,10 @@
         height: 100%;
         margin: 0;
         padding: 0;
+    }
+
+    #mapid {
+        height: 500px;
     }
 </style>
 @endpush
@@ -52,6 +58,11 @@
 </section>
 <!-- End Sample Area -->
 
+<section class="map">
+    <div class="container">
+        <div id="mapid"></div>
+    </div>
+</section>
 
 
 <!-- Start Align Area -->
@@ -179,6 +190,67 @@
         @endsection
 
         @push('after-scripts')
+        <script src="{{ asset('vendor/leaflet/leaflet.js') }}"></script>
+        <script>
+            // var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+            // L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            //     maxZoom: 18,
+            //     id: 'mapbox/streets-v11',
+            //     accessToken: 'your.mapbox.access.token'
+            // }).addTo(mymap);
+
+            // initialize Leaflet
+            var map = L.map('mapid').setView([{{ $tourdulich->diemkhoihanh_toado_string }}], 13);
+
+            // Setting custom icon
+            var LeafIcon = L.Icon.extend({
+                options: {
+                    shadowUrl: '{{ asset('vendor/leaflet/images/leaf-shadow.png') }}',
+                    iconSize:     [38, 95], // size of the icon
+                    shadowSize:   [50, 64], // size of the shadow
+                    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                    shadowAnchor: [4, 62],  // the same for the shadow
+                    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                }
+            });
+            var greenIcon = new LeafIcon({iconUrl: '{{ asset('vendor/leaflet/images/leaf-green.png') }}'}),
+                redIcon = new LeafIcon({iconUrl: '{{ asset('vendor/leaflet/images/leaf-red.png') }}'}),
+                orangeIcon = new LeafIcon({iconUrl: '{{ asset('vendor/leaflet/images/leaf-orange.png') }}'});
+
+            // add the OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+            }).addTo(map);
+
+            // show the scale bar on the lower left corner
+            L.control.scale().addTo(map);
+
+            
+            var pointKhoiDau = new L.LatLng({{ $tourdulich->diemkhoihanh_toado_string }});
+            var pointKetThuc = new L.LatLng({{ $tourdulich->diemden_toado_string }} );
+
+            // ---------- MARKER Bắt đầu
+            var markerTooltipTour = 'Tour du lịch: {{ $tourdulich->tentourdulich }}</br>Khởi hành từ: <b>{{ $tourdulich->diemkhoihanh_ten }}</b> - Đến: <b>{{ $tourdulich->diemden_ten }}</b>';
+            // show a marker on the map
+            L.marker(pointKhoiDau, {icon: greenIcon}).bindPopup(markerTooltipTour).addTo(map);
+
+            // ---------- MARKER Kết thúc
+            L.marker(pointKetThuc, {icon: redIcon}).bindPopup(markerTooltipTour).addTo(map);
+
+            // Vẽ đường nối 2 điểm
+            var pointList = [pointKhoiDau, pointKetThuc];
+
+            var firstpolyline = new L.polyline(pointList, {
+                color: 'red',
+                weight: 3,
+                opacity: 0.5,
+                smoothFactor: 1
+            });
+            firstpolyline.addTo(map);
+        </script>
+
         <script>
             $(document).ready(function() {
                 var toolbarOptions = [

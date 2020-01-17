@@ -24,7 +24,7 @@ class TourDuLich extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['matourdulich', 'tentourdulich', 'giatour_nguoilon', 'giatour_treem', 'diemkhoihanh_ten', 'diemkhoihanh_id_quanhuyen', 'diemkhoihanh_toado', 'diemden_ten', 'diemden_id_quanhuyen', 'diemden_toado', 'songaytour', 'hinhanh'];
+    protected $fillable = ['matourdulich', 'tentourdulich', 'giatour_nguoilon', 'giatour_treem', 'diemkhoihanh_ten', 'diemkhoihanh_id_quanhuyen', 'diemkhoihanh_toado', 'diemkhoihanh_toado_string', 'diemden_ten', 'diemden_id_quanhuyen', 'diemden_toado', 'diemden_toado_string', 'songaytour', 'hinhanh'];
 
     /**
      * @return string
