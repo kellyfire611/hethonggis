@@ -240,7 +240,8 @@
 
                     $(response.map).each(function() {
                         // debugger;
-                        var polygon = L.polygon(this, {fillColor: dynamicColors()}).addTo(map);
+                        var color = dynamicColors();
+                        var polygon = L.polygon(this, {color: color, fillColor: color}).addTo(map);
                     });
                 }
             });
