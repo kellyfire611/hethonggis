@@ -249,6 +249,25 @@
                 smoothFactor: 1
             });
             firstpolyline.addTo(map);
+
+            // Add marker các điểm tham quan
+            @foreach($tourdulich->diemthamquans as $diadiem)
+                @if(!empty($diadiem->GPS))
+                var markerTooltipDiemThamQuan = 'Điểm tham quan: <b>{!! $diadiem->tendiadiem !!}</b><br />';
+                markerTooltipDiemThamQuan += '<img src="{{ asset('storage/'.$diadiem->anhdaidien) }}" style="width:120px;" /><br />';
+                
+                @if(!empty($diadiem->dacsans))
+                    markerTooltipDiemThamQuan += '<b>Đặc sản nổi tiếng:</b> <br /><ul style="padding: 10px;list-style: disc;">';
+                    @foreach($diadiem->dacsans as $dacsan)
+                    markerTooltipDiemThamQuan += '<li>{{ $dacsan->tendacsan }}</li>';
+                    @endforeach
+                    markerTooltipDiemThamQuan += '</ul>';
+                @endif
+                
+                var pointDiaDiem = new L.LatLng({{ $diadiem->GPS }});
+                L.marker(pointDiaDiem, {icon: orangeIcon}).bindPopup(markerTooltipDiemThamQuan).addTo(map);
+                @endif
+            @endforeach
         </script>
 
         <script>

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use App\Models\DichVu;
 use App\Models\DiaChi;
 use App\Models\DanhGia;
+use App\Models\DacSan;
 
 /**
  * Class DiaDiem.
@@ -24,7 +25,7 @@ class DiaDiem extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['tendiadiem', 'motangan', 'anhdaidien', 'anhdaidien_blob', 'gioithieu', 'tukhoa', 'dienthoai', 'email', 'giomocua', 'giodongcua', 'GPS', 'trangthai'];
+    protected $fillable = ['madiemthamquan', 'tendiadiem', 'motangan', 'anhdaidien', 'anhdaidien_blob', 'gioithieu', 'tukhoa', 'dienthoai', 'email', 'giomocua', 'giodongcua', 'GPS', 'trangthai', 'id_quanhuyen'];
 
     /**
      * @return string
@@ -89,5 +90,10 @@ class DiaDiem extends Eloquent
     public function danhgias()
     {
       return $this->hasMany(DanhGia::class, 'id_diemthamquan', 'id');
+    }
+
+    public function dacsans()
+    {
+      return $this->belongsToMany(DacSan::class, 'diemthamquan_dacsan', 'id_diemthamquan', 'id_madacsan');
     }
 }
