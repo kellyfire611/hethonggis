@@ -15,21 +15,23 @@ class XaPhuong extends Eloquent
      *
      * @var string
      */
-    protected $table = 'xaphuong';
+    protected $table = 'phuongxa_attributes';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['tenxaphuong'];
+    protected $fillable = ['shapeid', 'ID_0', 'ISO', 'NAME_0', 'ID_1', 'NAME_1', 'ID_2', 'NAME_2', 'ID_3', 'NAME_3', 'TYPE_3', 'ENGTYPE_3', 'NL_NAME_3', 'VARNAME_3'];
+
+    protected $primaryKey = 'ID_3';
 
     /**
      * @return string
      */
     public function getShowButtonAttribute()
     {
-        return '<a href="'.route('admin.xaphuong.show', $this->_id).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.view').'" class="btn btn-info"><i class="fas fa-eye"></i></a>';
+        return '<a href="'.route('admin.xaphuong.show', $this->ID_3).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.view').'" class="btn btn-info"><i class="fas fa-eye"></i></a>';
     }
 
     /**
@@ -37,7 +39,7 @@ class XaPhuong extends Eloquent
      */
     public function getEditButtonAttribute()
     {
-        return '<a href="'.route('admin.xaphuong.edit', $this->_id).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.edit').'" class="btn btn-primary"><i class="fas fa-edit"></i></a>';
+        return '<a href="'.route('admin.xaphuong.edit', $this->ID_3).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.edit').'" class="btn btn-primary"><i class="fas fa-edit"></i></a>';
     }
 
     /**
@@ -45,7 +47,7 @@ class XaPhuong extends Eloquent
      */
     public function getDeleteButtonAttribute()
     {
-        return '<a href="'.route('admin.xaphuong.destroy', $this->_id).'"
+        return '<a href="'.route('admin.xaphuong.destroy', $this->ID_3).'"
                 data-method="delete"
                 data-trans-button-cancel="'.__('buttons.general.cancel').'"
                 data-trans-button-confirm="'.__('buttons.general.crud.delete').'"
@@ -76,6 +78,6 @@ class XaPhuong extends Eloquent
 
     public function quanhuyen()
     {
-      return $this->belongsTo(QuanHuyen::class);
+      return $this->belongsTo(QuanHuyen::class, 'ID_2', 'ID_2');
     }
 }

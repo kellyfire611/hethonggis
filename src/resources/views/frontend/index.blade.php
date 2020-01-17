@@ -26,12 +26,12 @@
     <div class="container">
         <div class="row fullscreen d-flex align-items-center justify-content-start">
             <div class="banner-content col-lg-8 col-md-12">
-                <h4 class="text-white text-uppercase">Có nhiều sự lựa chọn về Ẩm thực?</h4>
+                <h4 class="text-white text-uppercase">Có nhiều sự lựa chọn về Du lịch?</h4>
                 <h1>
-                    FEEDY Cung cấp các Địa điểm Ẩm thực nổi tiếng			
+                    Kanto Tourist Cung cấp các Địa điểm Du lịch nổi tiếng			
                 </h1>
                 <p class="text-white">
-                    Cùng khám phá các Địa điểm Ẩm thực nổi tiếng <br> ở gần ngay bên bạn mà bạn chưa biết đến?.
+                    Cùng khám phá các Địa điểm Du lịch nổi tiếng <br> ở gần ngay bên bạn mà bạn chưa biết đến?.
                 </p>
                 <a href="#" class="primary-btn header-btn text-uppercase">KHÁM PHÁ NGAY</a>
             </div>												
@@ -89,7 +89,7 @@
 					<div class="row d-flex justify-content-center">
 						<div class="menu-content col-lg-8">
 							<div class="title text-center">
-								<h1 class="mb-10">Các địa điểm Ẩm thực hot nhất</h1>
+								<h1 class="mb-10">Các địa điểm Du lịch hot nhất</h1>
 								<p>Được tuyển chọn với niềm tin yêu tuyệt đối từ Thực khách</p>
 							</div>
 						</div>
@@ -99,12 +99,12 @@
 						<div class="single-dish col-lg-3">
 							<div class="thumb box-ratio">
                                 <div class="box-ratio-content">
-									<a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->_id]) }}">
+									<a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->id]) }}">
 										<img class="img-fluid" src="{{ asset('storage/'.$diadiem->anhdaidien) }}" alt="">
                                     </a>
                                 </div>
                             </div>
-							<h4 class="text-uppercase pt-10"><a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->_id]) }}">{{ $diadiem->tendiadiem }}</a></h4>
+							<h4 class="text-uppercase pt-10"><a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->id]) }}">{{ $diadiem->tendiadiem }}</a></h4>
 							<p>
 							<input type="number" class="rating" value="{{ $diadiem->diemtrungbinh }}" data-step="1" data-size="xs" data-readonly="true" data-theme="krajee-svg" data-show-clear="false" data-show-caption="true" data-language="vi" />
                                 {{ $diadiem->motangan }}
@@ -139,8 +139,8 @@
 						<a class="play-btn" href="https://www.youtube.com/watch?v=MflT0I7ZPCs">
 							<img src="{{ asset('restaurant/img/play-btn.png') }}" alt="">
 						</a>
-						<h3 class="pt-20 pb-20 text-white">Chúng tôi luôn cố gắng cung cấp các Địa điểm Ẩm thực với các món ăn tuyệt hảo nhất</h3>
-						<p class="text-white">Click vào để xem video Ẩm thực cực bắt mắt</p>
+						<h3 class="pt-20 pb-20 text-white">Chúng tôi luôn cố gắng cung cấp các Địa điểm Du lịch với các món ăn tuyệt hảo nhất</h3>
+						<p class="text-white">Click vào để xem video Du lịch cực bắt mắt</p>
 					</div>
 				</div>	
 			</section>
@@ -209,7 +209,7 @@
 								   <p class="pt-30 pb-30">
 								 	  	{{ $monan->motangan }}
 								   </p>
-									<a href="{{ route('frontend.diadiem.show', ['monan' => $monan->_id]) }}" class="primary-btn header-btn text-uppercase">Ghé thăm Địa điểm ngay</a>								   
+									<a href="{{ route('frontend.diadiem.show', ['monan' => $monan->id]) }}" class="primary-btn header-btn text-uppercase">Ghé thăm Địa điểm ngay</a>								   
 								</div>
 								<div class="col-lg-6 box-ratio">
 									<div class="box-ratio-content">
@@ -232,7 +232,7 @@
 						<div class="menu-content col-lg-8">
 							<div class="title text-center">
 								<h1 class="mb-10">Gặp gỡ các Đầu bếp siêu hạng</h1>
-								<p>Người đánh giá, kiểm định chất lượng của các Địa điểm Ẩm thực</p>
+								<p>Người đánh giá, kiểm định chất lượng của các Địa điểm Du lịch</p>
 							</div>
 						</div>
 					</div>						
@@ -290,7 +290,7 @@
 						    </div>
 						    <div class="meta-text mt-30 text-center">
 							    <h4>Lena Keller</h4>
-							    <p>Chuyên gia Bình Luận Ẩm thực</p>			    	
+							    <p>Chuyên gia Bình Luận Du lịch</p>			    	
 						    </div>
 						</div>																		
 					</div>
@@ -310,7 +310,7 @@
 								<input name="fname" placeholder="Tên của bạn" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Tên của bạn'" class="common-input mt-10" required="" type="text">
 								<input name="email" placeholder="Email của bạn" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email của bạn'" class="common-input mt-10" required="" type="email">
 								<textarea class="common-textarea mt-10" name="message" placeholder="Lời nhắn" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Lời nhắn'" required=""></textarea>
-								<button class="primary-btn mt-20">Gởi lời nhắn đến Feedy<span class="lnr lnr-arrow-right"></span></button>
+								<button class="primary-btn mt-20">Gởi lời nhắn đến Kanto Tourist<span class="lnr lnr-arrow-right"></span></button>
 								<div class="mt-10 alert-msg">
 								</div>
 							</form>

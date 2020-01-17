@@ -209,34 +209,34 @@ class DiaDiemController extends Controller
     public function edit(ManageDiaDiemRequest $request, $_id)
     {
         $DiaDiem = DiaDiem::find($_id);
-        $diachis = [];
-        $tinhthanh = TinhThanh::all();
-        foreach($tinhthanh as $keyTT => $valueTT)
-        {
-            foreach($valueTT->quanhuyens as $keyQH => $valueQH)
-            {
-                foreach($valueQH->xaphuongs as $keyXP => $valueXP)
-                {
-                    $diachis[] = [
-                        'tinhthanh' => $valueTT->tentinhthanh,
-                        'quanhuyen' => $valueQH->tenquanhuyen,
-                        'xaphuong' => $valueXP->tenxaphuong,
-                        'all' => "$valueTT->tentinhthanh - $valueQH->tenquanhuyen - $valueXP->tenxaphuong"
-                    ];
-                }
-            }
-        }
-        $DiaDiem->diachiedit = $DiaDiem->diachi->tinhthanh.' - '.$DiaDiem->diachi->quanhuyen.' - '.$DiaDiem->diachi->xaphuong;
-        $diachis[] = [
-            'tinhthanh' => $DiaDiem->diachi->tinhthanh,
-            'quanhuyen' => $DiaDiem->diachi->quanhuyen,
-            'xaphuong' => $DiaDiem->diachi->xaphuong,
-            'all' => $DiaDiem->diachi->tinhthanh.' - '.$DiaDiem->diachi->quanhuyen.' - '.$DiaDiem->diachi->xaphuong
-        ];
+        // $diachis = [];
+        // $tinhthanh = TinhThanh::all();
+        // foreach($tinhthanh as $keyTT => $valueTT)
+        // {
+        //     foreach($valueTT->quanhuyens as $keyQH => $valueQH)
+        //     {
+        //         foreach($valueQH->xaphuongs as $keyXP => $valueXP)
+        //         {
+        //             $diachis[] = [
+        //                 'tinhthanh' => $valueTT->tentinhthanh,
+        //                 'quanhuyen' => $valueQH->tenquanhuyen,
+        //                 'xaphuong' => $valueXP->tenxaphuong,
+        //                 'all' => "$valueTT->tentinhthanh - $valueQH->tenquanhuyen - $valueXP->tenxaphuong"
+        //             ];
+        //         }
+        //     }
+        // }
+        // $DiaDiem->diachiedit = $DiaDiem->diachi->tinhthanh.' - '.$DiaDiem->diachi->quanhuyen.' - '.$DiaDiem->diachi->xaphuong;
+        // $diachis[] = [
+        //     'tinhthanh' => $DiaDiem->diachi->tinhthanh,
+        //     'quanhuyen' => $DiaDiem->diachi->quanhuyen,
+        //     'xaphuong' => $DiaDiem->diachi->xaphuong,
+        //     'all' => $DiaDiem->diachi->tinhthanh.' - '.$DiaDiem->diachi->quanhuyen.' - '.$DiaDiem->diachi->xaphuong
+        // ];
         // dd($DiaDiem);
         return view('backend.diadiem.edit')
-            ->with('diadiem', $DiaDiem)
-            ->with('diachis', $diachis);
+            ->with('diadiem', $DiaDiem);
+            // ->with('diachis', $diachis);
     }
 
     /**

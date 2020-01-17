@@ -6,7 +6,7 @@
 							<div class="single-footer-widget">
                                 <h4 class="text-white">Giảng viên</h4>
                                 <p>
-                                    <b>PGS. TS. Đỗ Thanh Nghị</b>
+                                    <b>TS. Trương Quốc Định</b>
                                 </p>
 							</div>
 						</div>
@@ -15,17 +15,17 @@
                                 <h4 class="text-white">Đồ án nhóm 1</h4>
                                 <p>
                                 Lưu Hoài Sang (M2518007)<br />
-                                Nguyễn Triều Vương (M2518016)<br />
                                 Dương Nguyễn Phú Cường (M2518001)<br />
                                 Tống Kim Anh Dũng (M2518010)<br />
-                                Mai Thị Cẩm Nhung (M2518006)
+                                Mai Thị Cẩm Nhung (M2518006)<br />
+                                Đàm Quang Viễn (M2518015)<br />
                                 </p>
                             </div>
 						</div>						
 						<div class="col-lg-4 col-md-6 col-sm-6">
 							<div class="single-footer-widget">
 								<h4 class="text-white">Đăng ký nhận tin</h4>
-								<p>Chúng tôi sẽ thông báo cho bạn ngay khi có Địa điểm Ẩm thực mới được đăng tải</p>
+								<p>Chúng tôi sẽ thông báo cho bạn ngay khi có Địa điểm Du lịch mới được đăng tải</p>
 								<div class="d-flex flex-row" id="mc_embed_signup">
 
 

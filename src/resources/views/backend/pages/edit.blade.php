@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-{{ html()->modelForm($page, 'PATCH', route('admin.pages.update', $page->_id))->class('form-horizontal quill-form')->open() }}
+{{ html()->modelForm($page, 'PATCH', route('admin.pages.update', $page->id))->class('form-horizontal quill-form')->open() }}
     <div class="card">
         <div class="card-body">
             <div class="row">

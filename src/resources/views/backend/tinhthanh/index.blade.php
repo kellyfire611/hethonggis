@@ -34,7 +34,7 @@
                         <tbody>
                         @foreach($tinhthanhs as $tinhthanh)
                             <tr>
-                                <td>{{ $tinhthanh->tentinhthanh }}</td>
+                                <td>{{ $tinhthanh->NAME_1 }}</td>
                                 <td>{!! $tinhthanh->action_buttons !!}</td>
                             </tr>
                         @endforeach

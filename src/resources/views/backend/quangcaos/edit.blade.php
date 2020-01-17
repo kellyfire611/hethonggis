@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-{{ html()->modelForm($quangcao, 'PATCH', route('admin.quangcaos.update', $quangcao->_id))->class('form-horizontal quill-form')->acceptsFiles()->open() }}
+{{ html()->modelForm($quangcao, 'PATCH', route('admin.quangcaos.update', $quangcao->id))->class('form-horizontal quill-form')->acceptsFiles()->open() }}
     <div class="card">
         <div class="card-body">
             <div class="row">

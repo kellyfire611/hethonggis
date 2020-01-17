@@ -20,6 +20,6 @@
     RewriteRule ^ index.php [L]
 
     #RewriteCond %{HTTP_REFERER}!^$
-    #RewriteCond %{HTTP_REFERER}!^http://(www.)?feedy.local/[nc]
-    #RewriteRule .*.(gif|jpg|png)$ http://feedy.local/img/nohotlink.gif[nc]
+    #RewriteCond %{HTTP_REFERER}!^http://(www.)?quanlytourdulich.local/[nc]
+    #RewriteRule .*.(gif|jpg|png)$ http://quanlytourdulich.local/img/nohotlink.gif[nc]
 </IfModule>

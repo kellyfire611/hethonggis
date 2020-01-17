@@ -134,7 +134,7 @@
             @endguest
 
             @auth
-            {{ html()->form('POST', route('frontend.diadiem.goidanhgia', ['diadiem' => $diadiem->_id]))->class('form-horizontal quill-form border p-2')->open() }}
+            {{ html()->form('POST', route('frontend.diadiem.goidanhgia', ['diadiem' => $diadiem->id]))->class('form-horizontal quill-form border p-2')->open() }}
             <div class="row">
                 <div class="col">
                     <div class="form-group row">

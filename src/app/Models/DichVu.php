@@ -44,7 +44,7 @@ class DichVu extends Eloquent
      */
     public function getShowButtonAttribute()
     {
-        return '<a href="'.route('admin.dichvu.show', $this->_id).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.view').'" class="btn btn-info"><i class="fas fa-eye"></i></a>';
+        return '<a href="'.route('admin.dichvu.show', $this->id).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.view').'" class="btn btn-info"><i class="fas fa-eye"></i></a>';
     }
 
     /**
@@ -52,7 +52,7 @@ class DichVu extends Eloquent
      */
     public function getEditButtonAttribute()
     {
-        return '<a href="'.route('admin.dichvu.edit', $this->_id).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.edit').'" class="btn btn-primary"><i class="fas fa-edit"></i></a>';
+        return '<a href="'.route('admin.dichvu.edit', $this->id).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.edit').'" class="btn btn-primary"><i class="fas fa-edit"></i></a>';
     }
 
     /**
@@ -60,7 +60,7 @@ class DichVu extends Eloquent
      */
     public function getDeleteButtonAttribute()
     {
-        return '<a href="'.route('admin.dichvu.destroy', $this->_id).'"
+        return '<a href="'.route('admin.dichvu.destroy', $this->id).'"
                 data-method="delete"
                 data-trans-button-cancel="'.__('buttons.general.cancel').'"
                 data-trans-button-confirm="'.__('buttons.general.crud.delete').'"
@@ -91,6 +91,6 @@ class DichVu extends Eloquent
 
     public function diadiem()
     {
-      return $this->belongsTo(DiaDiem::class);
+      return $this->belongsTo(DiaDiem::class, 'id_diemthamquan', 'id');
     }
 }

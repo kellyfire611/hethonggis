@@ -10,7 +10,7 @@
 @endpush
 
 @section('content')
-{{ html()->modelForm($diadiem, 'PATCH', route('admin.diadiem.update', $diadiem->_id))->class('form-horizontal quill-form')->acceptsFiles()->open() }}
+{{ html()->modelForm($diadiem, 'PATCH', route('admin.diadiem.update', $diadiem->id))->class('form-horizontal quill-form')->acceptsFiles()->open() }}
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -66,27 +66,7 @@
                             </div>
                         </div><!--form-group-->
 
-                        <div class="form-group row">
-                            {{ html()->label('Địa chỉ')->class('col-md-2 form-control-label')->for('tendiachi') }}
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" name="tendiachi" id="tendiachi" value="{{ old('tendiachi', $diadiem->diachi->tendiachi) }}" placeholder="Địa chỉ" maxlength="191" required="">
-                            </div><!--col-->
-                        </div><!--form-group-->
-
-                        <div class="form-group row">
-                            {{ html()->label('Tỉnh thành/Quận huyện/Xã phường')->class('col-md-2 form-control-label')->for('tinhthanh') }}
-                            <div class="col-md-10">
-                                <select name="slTinhThanh" class="form-control">
-                                @foreach($diachis as $diachi)
-                                @if($diadiem->diachiedit === $diachi['all'])
-                                <option value="{{ $diachi['all'] }}" selected>{{ $diachi['all'] }}</option>
-                                @else
-                                <option value="{{ $diachi['all'] }}">{{ $diachi['all'] }}</option>
-                                @endif
-                                @endforeach
-                                </select>
-                            </div><!--col-->
-                        </div><!--form-group-->
+                       
 
                         <div class="form-group row">
                             {{ html()->label('Từ khóa')->class('col-md-2 form-control-label')->for('tukhoa') }}

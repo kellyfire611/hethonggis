@@ -33,7 +33,7 @@ class TinhThanhRepository extends BaseRepository
     public function getActivePaginated($paged = 25, $orderBy = 'created_at', $sort = 'desc') : LengthAwarePaginator
     {
         return $this->model
-            ->orderBy($orderBy, $sort)
+            // ->orderBy($orderBy, $sort)
             ->paginate($paged);
     }
 

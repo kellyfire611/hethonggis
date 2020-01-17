@@ -16,21 +16,23 @@ class QuanHuyen extends Eloquent
      *
      * @var string
      */
-    protected $table = 'quanhuyen';
+    protected $table = 'quanhuyen_attributes';
+
+    protected $primaryKey = 'ID_2';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['tenquanhuyen'];
+    protected $fillable = ['shapeid', 'ID_0', 'ISO', 'NAME_0', 'ID_1', 'NAME_1', 'ID_2', 'NAME_2', 'TYPE_2', 'ENGTYPE_2', 'NL_NAME_2', 'VARNAME_2'];
 
     /**
      * @return string
      */
     public function getShowButtonAttribute()
     {
-        return '<a href="'.route('admin.quanhuyen.show', $this->_id).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.view').'" class="btn btn-info"><i class="fas fa-eye"></i></a>';
+        return '<a href="'.route('admin.quanhuyen.show', $this->ID_2).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.view').'" class="btn btn-info"><i class="fas fa-eye"></i></a>';
     }
 
     /**
@@ -38,7 +40,7 @@ class QuanHuyen extends Eloquent
      */
     public function getEditButtonAttribute()
     {
-        return '<a href="'.route('admin.quanhuyen.edit', $this->_id).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.edit').'" class="btn btn-primary"><i class="fas fa-edit"></i></a>';
+        return '<a href="'.route('admin.quanhuyen.edit', $this->ID_2).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.edit').'" class="btn btn-primary"><i class="fas fa-edit"></i></a>';
     }
 
     /**
@@ -46,7 +48,7 @@ class QuanHuyen extends Eloquent
      */
     public function getDeleteButtonAttribute()
     {
-        return '<a href="'.route('admin.quanhuyen.destroy', $this->_id).'"
+        return '<a href="'.route('admin.quanhuyen.destroy', $this->ID_2).'"
                 data-method="delete"
                 data-trans-button-cancel="'.__('buttons.general.cancel').'"
                 data-trans-button-confirm="'.__('buttons.general.crud.delete').'"
@@ -77,11 +79,11 @@ class QuanHuyen extends Eloquent
 
     public function tinhthanh()
     {
-      return $this->belongsTo(TinhThanh::class);
+      return $this->belongsTo(TinhThanh::class, 'ID_1', 'ID_1');
     }
 
     public function xaphuongs()
     {
-      return $this->embedsMany(XaPhuong::class);
+      return $this->hasMany(XaPhuong::class, 'ID_2', 'ID_2');
     }
 }

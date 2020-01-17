@@ -8,12 +8,12 @@
     <div class="container">
         <div class="row fullscreen d-flex align-items-center justify-content-start">
             <div class="banner-content col-lg-8 col-md-12">
-                <h4 class="text-white text-uppercase">Có nhiều sự lựa chọn về Ẩm thực?</h4>
+                <h4 class="text-white text-uppercase">Có nhiều sự lựa chọn về Du lịch?</h4>
                 <h1>
-                    FEEDY Cung cấp các Địa điểm Ẩm thực nổi tiếng			
+                    Kanto Tourist Cung cấp các Địa điểm Du lịch nổi tiếng			
                 </h1>
                 <p class="text-white">
-                    Cùng khám phá các Địa điểm Ẩm thực nổi tiếng <br> ở gần ngay bên bạn mà bạn chưa biết đến?.
+                    Cùng khám phá các Địa điểm Du lịch nổi tiếng <br> ở gần ngay bên bạn mà bạn chưa biết đến?.
                 </p>
                 <a href="#" class="primary-btn header-btn text-uppercase">KHÁM PHÁ NGAY</a>
             </div>												
@@ -50,7 +50,7 @@
 		<div class="row d-flex justify-content-center">
 			<div class="menu-content col-lg-8">
 				<div class="title text-center">
-					<h1 class="mb-10">Có {{ $diadiems->count() }} địa điểm Ẩm thực tìm được</h1>
+					<h1 class="mb-10">Có {{ $diadiems->count() }} địa điểm Du lịch tìm được</h1>
 					<p>Được tuyển chọn với niềm tin yêu tuyệt đối từ Thực khách</p>
 				</div>
 			</div>
@@ -65,12 +65,12 @@
 			<div class="single-dish col-lg-3">
 				<div class="thumb box-ratio">
 					<div class="box-ratio-content">
-						<a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->_id]) }}">
+						<a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->id]) }}">
 							<img class="img-fluid" src="{{ asset('storage/'.$diadiem->anhdaidien) }}" alt="">
 						</a>
 					</div>
 				</div>
-				<h4 class="text-uppercase pt-10"><a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->_id]) }}">{{ $diadiem->tendiadiem }}</a></h4>
+				<h4 class="text-uppercase pt-10"><a href="{{ route('frontend.diadiem.show', ['diadiem' => $diadiem->id]) }}">{{ $diadiem->tendiadiem }}</a></h4>
 				<p>
 					{{ $diadiem->motangan }}
 				</p>

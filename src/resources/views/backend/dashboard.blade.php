@@ -8,7 +8,7 @@
         <div class="card text-white bg-primary">
             <div class="card-body">
                 <div class="text-value">{{ $baocaodata['diadiem_count'] }}</div>
-                <div>Địa điểm Ẩm Thực</div>
+                <div>Địa điểm Du lịch</div>
             </div>
         </div>  
     </div>
@@ -16,7 +16,7 @@
         <div class="card text-white bg-info">
             <div class="card-body">
                 <div class="text-value">{{ $baocaodata['dichvu_count'] }}</div>
-                <div>Dịch vụ Ẩm Thực</div>
+                <div>Dịch vụ Du lịch</div>
             </div>
         </div>  
     </div>

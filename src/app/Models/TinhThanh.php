@@ -15,21 +15,23 @@ class TinhThanh extends Eloquent
      *
      * @var string
      */
-    protected $table = 'tinhthanh';
+    protected $table = 'tinh_attributes';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['tentinhthanh'];
+    protected $fillable = ['shapeid', 'ID_0', 'ISO', 'NAME_0', 'ID_1', 'NAME_1', 'TYPE_1', 'ENGTYPE_1', 'NL_NAME_1', 'VARNAME_1'];
+
+    protected $primaryKey = 'ID_1';
 
     /**
      * @return string
      */
     public function getShowButtonAttribute()
     {
-        return '<a href="'.route('admin.tinhthanh.show', $this->_id).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.view').'" class="btn btn-info"><i class="fas fa-eye"></i></a>';
+        return '<a href="'.route('admin.tinhthanh.show', $this->ID_1).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.view').'" class="btn btn-info"><i class="fas fa-eye"></i></a>';
     }
 
     /**
@@ -37,7 +39,7 @@ class TinhThanh extends Eloquent
      */
     public function getEditButtonAttribute()
     {
-        return '<a href="'.route('admin.tinhthanh.edit', $this->_id).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.edit').'" class="btn btn-primary"><i class="fas fa-edit"></i></a>';
+        return '<a href="'.route('admin.tinhthanh.edit', $this->ID_1).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.edit').'" class="btn btn-primary"><i class="fas fa-edit"></i></a>';
     }
 
     /**
@@ -45,7 +47,7 @@ class TinhThanh extends Eloquent
      */
     public function getDeleteButtonAttribute()
     {
-        return '<a href="'.route('admin.tinhthanh.destroy', $this->_id).'"
+        return '<a href="'.route('admin.tinhthanh.destroy', $this->ID_1).'"
                 data-method="delete"
                 data-trans-button-cancel="'.__('buttons.general.cancel').'"
                 data-trans-button-confirm="'.__('buttons.general.crud.delete').'"
@@ -76,6 +78,6 @@ class TinhThanh extends Eloquent
 
     public function quanhuyens()
     {
-      return $this->embedsMany(QuanHuyen::class);
+      return $this->hasMany(QuanHuyen::class, 'ID_1', 'ID_1');
     }
 }
