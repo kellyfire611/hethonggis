@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\DiaDiemController;
+use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\User\AccountController;
-use App\Http\Controllers\Frontend\User\DashboardController;
 use App\Http\Controllers\Frontend\User\ProfileController;
+use App\Http\Controllers\Frontend\User\DashboardController;
 
 /*
  * Frontend Controllers
@@ -14,6 +16,17 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact/send', [ContactController::class, 'send'])->name('contact.send');
 
+// Pages
+Route::get('pages/{slug}', [PageController::class, 'show'])->name('pages.show');
+
+// Địa điểm
+Route::get('/diadiem', [DiaDiemController::class, 'index'])->name('diadiem.index');
+Route::get('diadiem/{diadiem}/', [DiaDiemController::class, 'show'])->name('diadiem.show');
+Route::post('diadiem/{diadiem}/goidanhgia/', [DiaDiemController::class, 'goidanhgia'])->name('diadiem.goidanhgia');
+
+// Search
+Route::post('timkiem', [HomeController::class, 'search'])->name('search');
+
 /*
  * These frontend controllers require the user to be logged in
  * All route names are prefixed with 'frontend.'
@@ -21,13 +34,19 @@ Route::post('contact/send', [ContactController::class, 'send'])->name('contact.s
  */
 Route::group(['middleware' => ['auth', 'password_expires']], function () {
     Route::group(['namespace' => 'User', 'as' => 'user.'], function () {
-        // User Dashboard Specific
+        /*
+         * User Dashboard Specific
+         */
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // User Account Specific
+        /*
+         * User Account Specific
+         */
         Route::get('account', [AccountController::class, 'index'])->name('account');
 
-        // User Profile Specific
+        /*
+         * User Profile Specific
+         */
         Route::patch('profile/update', [ProfileController::class, 'update'])->name('profile.update');
     });
 });

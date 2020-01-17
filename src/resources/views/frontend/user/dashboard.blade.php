@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col col-sm-4 order-1 order-sm-2  mb-4">
                             <div class="card mb-4 bg-light">
-                                <img class="card-img-top" src="{{ $logged_in_user->picture }}" alt="Profile Picture">
+                                <img class="card-img-top" src="{{ !empty($logged_in_user->picture) ? $logged_in_user->picture : asset('img/default-avatar-male.png') }}" alt="Profile Picture" style="width: 300px; height: 300px;">
 
                                 <div class="card-body">
                                     <h4 class="card-title">

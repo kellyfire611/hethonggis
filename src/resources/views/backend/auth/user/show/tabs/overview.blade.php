@@ -18,12 +18,12 @@
 
             <tr>
                 <th>@lang('labels.backend.access.users.tabs.content.overview.status')</th>
-                <td>@include('backend.auth.user.includes.status', ['user' => $user])</td>
+                <td>{!! $user->status_label !!}</td>
             </tr>
 
             <tr>
                 <th>@lang('labels.backend.access.users.tabs.content.overview.confirmed')</th>
-                <td>@include('backend.auth.user.includes.confirm', ['user' => $user])</td>
+                <td>{!! $user->confirmed_label !!}</td>
             </tr>
 
             <tr>

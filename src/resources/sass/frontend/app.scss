@@ -1,13 +1,23 @@
-@import "../global";
-
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
-// Bootstrap Overrides
-@import 'variables';
-
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import '../../../node_modules/bootstrap/scss/bootstrap';
+
+// Global
+@import 'global';
 
 // Pages
 @import 'pages/dashboard';
+
+// Bootstrap Overrides
+@import 'custom';
+
+// Plugins
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.snow.css";
+
+@import '~bootstrap-star-rating/css/star-rating.css';
+@import '~bootstrap-star-rating/themes/krajee-svg/theme.css';
+
+@import '~owl.carousel/dist/assets/owl.carousel.css';

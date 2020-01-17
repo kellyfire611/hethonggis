@@ -3,6 +3,22 @@
 @section('title', app_name() . ' | ' . __('labels.frontend.auth.register_box_title'))
 
 @section('content')
+<!-- Start banner Area -->
+<section class="generic-banner relative" style="background: url('{{ asset('restaurant/img/header-bg-food-4.jpg') }}'); background-position: center; background-repeat: no-repeat; background-size: cover;">						
+    <div class="container">
+        <div class="row height align-items-center justify-content-center">
+            <div class="col-lg-10">
+                <div class="generic-banner-content">
+                    <h2 class="text-white">Đăng ký</h2>
+                    <p class="text-white"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>		
+<!-- End banner Area -->
+
+<div class="container mt-20 mb-20">
     <div class="row justify-content-center align-items-center">
         <div class="col col-sm-8 align-self-center">
             <div class="card">
@@ -22,8 +38,7 @@
                                     {{ html()->text('first_name')
                                         ->class('form-control')
                                         ->placeholder(__('validation.attributes.frontend.first_name'))
-                                        ->attribute('maxlength', 191)
-                                        ->required()}}
+                                        ->attribute('maxlength', 191) }}
                                 </div><!--col-->
                             </div><!--row-->
 
@@ -34,8 +49,7 @@
                                     {{ html()->text('last_name')
                                         ->class('form-control')
                                         ->placeholder(__('validation.attributes.frontend.last_name'))
-                                        ->attribute('maxlength', 191)
-                                        ->required() }}
+                                        ->attribute('maxlength', 191) }}
                                 </div><!--form-group-->
                             </div><!--col-->
                         </div><!--row-->
@@ -83,7 +97,7 @@
                         @if(config('access.captcha.registration'))
                             <div class="row">
                                 <div class="col">
-                                    @captcha
+                                    {!! Captcha::display() !!}
                                     {{ html()->hidden('captcha_status', 'true') }}
                                 </div><!--col-->
                             </div><!--row-->
@@ -101,18 +115,20 @@
                     <div class="row">
                         <div class="col">
                             <div class="text-center">
-                                @include('frontend.auth.includes.socialite')
+                                {!! $socialiteLinks !!}
                             </div>
                         </div><!--/ .col -->
                     </div><!-- / .row -->
+
                 </div><!-- card-body -->
             </div><!-- card -->
         </div><!-- col-md-8 -->
     </div><!-- row -->
+</div>
 @endsection
 
 @push('after-scripts')
     @if(config('access.captcha.registration'))
-        @captchaScripts
+        {!! Captcha::script() !!}
     @endif
 @endpush

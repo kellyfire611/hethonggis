@@ -1,7 +1,9 @@
-<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownLanguageLink">
+<ul>
     @foreach(array_keys(config('locale.languages')) as $lang)
+        <li>
         @if($lang != app()->getLocale())
-            <small><a href="{{ '/lang/'.$lang }}" class="dropdown-item pt-1 pb-1">@lang('menus.language-picker.langs.'.$lang)</a></small>
+            <small><a href="{{ '/lang/'.$lang }}" class="dropdown-item">@lang('menus.language-picker.langs.'.$lang)</a></small>
         @endif
+        </li>
     @endforeach
-</div>
+</ul>

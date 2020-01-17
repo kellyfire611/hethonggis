@@ -1,0 +1,23 @@
+// Here you can add other styles
+@import '~simple-line-icons/scss/simple-line-icons';
+// Font awesome
+//$fa-font-path:"../node_modules/font-awesome/fonts";
+// @import "../node_modules/font-awesome/scss/font-awesome";
+// .icon-user {
+//   @extend .fa;
+//   @extend .fa-user;
+// }
+//@import '~font-awesome/scss/font-awesome';
+@import '~bootstrap-fileinput/scss/fileinput';
+@import '~bootstrap-fileinput/scss/themes/explorer-fas/theme';
+
+// Fix mobile footer
+.app-footer {
+    flex: 0 0;
+    padding-top: map-get($spacers, 3);
+    padding-bottom: map-get($spacers, 3);
+}
+
+.number {
+    text-align: right;
+}

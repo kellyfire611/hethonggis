@@ -1,48 +1,40 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-    <a href="{{ route('frontend.index') }}" class="navbar-brand">{{ app_name() }}</a>
-
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="@lang('labels.general.toggle_navigation')">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-        <ul class="navbar-nav">
-            @if(config('locale.status') && count(config('locale.languages')) > 1)
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownLanguageLink" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">@lang('menus.language-picker.language') ({{ strtoupper(app()->getLocale()) }})</a>
-
+<header id="header" id="home">
+    <div class="container">
+        <div class="row align-items-center justify-content-between d-flex">
+            <div id="logo">
+            <a href="{{ route('frontend.index') }}"><img src="{{ asset('img/logo.png') }}" alt="{{ app_name() }}" title="{{ app_name() }}" /></a>
+            </div>
+            <nav id="nav-menu-container">
+            <ul class="nav-menu">
+                <li class="{{ active_class(Active::checkUriPattern('/'), 'menu-active') }}"><a href="{{ route('frontend.index') }}">Trang chủ</a></li>
+                <li class="{{ active_class(Active::checkUriPattern('pages/gioi-thieu'), 'menu-active') }}"><a href="{{ route('frontend.pages.show', ['slug' => 'gioi-thieu']) }}">Giới thiệu</a></li>
+                <li class="{{ active_class(Active::checkUriPattern('contact'), 'menu-active') }}"><a href="{{ route('frontend.contact') }}">Liên hệ</a></li>
+                @if(config('locale.status') && count(config('locale.languages')) > 1)
+                <li class="menu-has-children">
+                    <a href="#">@lang('menus.language-picker.language') ({{ strtoupper(app()->getLocale()) }})</a>
                     @include('includes.partials.lang')
                 </li>
-            @endif
-
-            @auth
-                <li class="nav-item"><a href="{{route('frontend.user.dashboard')}}" class="nav-link {{ active_class(Route::is('frontend.user.dashboard')) }}">@lang('navs.frontend.dashboard')</a></li>
-            @endauth
-
-            @guest
-                <li class="nav-item"><a href="{{route('frontend.auth.login')}}" class="nav-link {{ active_class(Route::is('frontend.auth.login')) }}">@lang('navs.frontend.login')</a></li>
+                @endif
+                
+                @guest
+                <li><a href="{{route('frontend.auth.login')}}" class="nav-link {{ active_class(Active::checkRoute('frontend.auth.login')) }}">Đăng nhập</a></li>
 
                 @if(config('access.registration'))
-                    <li class="nav-item"><a href="{{route('frontend.auth.register')}}" class="nav-link {{ active_class(Route::is('frontend.auth.register')) }}">@lang('navs.frontend.register')</a></li>
+                    <li><a href="{{route('frontend.auth.register')}}" class="nav-link {{ active_class(Active::checkRoute('frontend.auth.register')) }}">Đăng ký</a></li>
                 @endif
-            @else
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuUser" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">{{ $logged_in_user->name }}</a>
+                @else
+                    <li class="menu-has-children">
+                        <a href="#">{{ $logged_in_user->name }}</a>
+                        <ul>                            
+                            <li><a href="{{ route('admin.dashboard') }}" class="dropdown-item">Quản trị</a></li>
 
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuUser">
-                        @can('view backend')
-                            <a href="{{ route('admin.dashboard') }}" class="dropdown-item">@lang('navs.frontend.user.administration')</a>
-                        @endcan
-
-                        <a href="{{ route('frontend.user.account') }}" class="dropdown-item {{ active_class(Route::is('frontend.user.account')) }}">@lang('navs.frontend.user.account')</a>
-                        <a href="{{ route('frontend.auth.logout') }}" class="dropdown-item">@lang('navs.general.logout')</a>
-                    </div>
-                </li>
-            @endguest
-
-            <li class="nav-item"><a href="{{route('frontend.contact')}}" class="nav-link {{ active_class(Route::is('frontend.contact')) }}">@lang('navs.frontend.contact')</a></li>
-        </ul>
+                            <li><a href="{{ route('frontend.user.account') }}" class="dropdown-item {{ active_class(Active::checkRoute('frontend.user.account')) }}">Trang cá nhân</a></li>
+                            <li><a href="{{ route('frontend.auth.logout') }}" class="dropdown-item">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                @endguest
+            </ul>
+            </nav><!-- #nav-menu-container -->		    		
+        </div>
     </div>
-</nav>
+    </header><!-- #header -->

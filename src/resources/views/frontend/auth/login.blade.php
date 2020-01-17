@@ -3,6 +3,22 @@
 @section('title', app_name() . ' | ' . __('labels.frontend.auth.login_box_title'))
 
 @section('content')
+<!-- Start banner Area -->
+<section class="generic-banner relative" style="background: url('{{ asset('restaurant/img/header-bg-food-3.png') }}'); background-position: center; background-repeat: no-repeat; background-size: cover;">						
+    <div class="container">
+        <div class="row height align-items-center justify-content-center">
+            <div class="col-lg-10">
+                <div class="generic-banner-content">
+                    <h2 class="text-white">Đăng nhập</h2>
+                    <p class="text-white"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>		
+<!-- End banner Area -->
+
+<div class="container mt-20 mb-20">
     <div class="row justify-content-center align-items-center">
         <div class="col col-sm-8 align-self-center">
             <div class="card">
@@ -59,15 +75,6 @@
                             </div><!--col-->
                         </div><!--row-->
 
-                        @if(config('access.captcha.login'))
-                            <div class="row">
-                                <div class="col">
-                                    @captcha
-                                    {{ html()->hidden('captcha_status', 'true') }}
-                                </div><!--col-->
-                            </div><!--row-->
-                        @endif
-
                         <div class="row">
                             <div class="col">
                                 <div class="form-group text-right">
@@ -80,7 +87,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="text-center">
-                                @include('frontend.auth.includes.socialite')
+                                {!! $socialiteLinks !!}
                             </div>
                         </div><!--col-->
                     </div><!--row-->
@@ -88,10 +95,5 @@
             </div><!--card-->
         </div><!-- col-md-8 -->
     </div><!-- row -->
+</div>
 @endsection
-
-@push('after-scripts')
-    @if(config('access.captcha.login'))
-        @captchaScripts
-    @endif
-@endpush

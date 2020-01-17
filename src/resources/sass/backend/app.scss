@@ -1,25 +1,21 @@
-@import "../global";
+/*!
+ * CoreUI - Open Source Dashboard UI Kit
+ * @version v2.0.4
+ * @link https://coreui.io
+ * Copyright (c) 2018 creativeLabs Łukasz Holeczek
+ * Licensed under MIT (https://coreui.io/license)
+ */
 
 // If you want to override variables do it here
 @import "variables";
 
 // Import styles
 @import "~@coreui/coreui/scss/coreui";
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.snow.css";
 
-// Fix inaccessible dropdown in .table-responsive dropdown buttons
-.table-responsive {
-    overflow-x: inherit;
-    td:not(.btn-td) {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        max-width: 200px;
-    }
-}
+@import '~bootstrap-star-rating/css/star-rating.css';
+@import '~bootstrap-star-rating/themes/krajee-svg/theme.css';
 
-// Fix mobile footer
-.app-footer {
-    flex: 0 0;
-    padding-top: map-get($spacers, 3);
-    padding-bottom: map-get($spacers, 3);
-}
+// If you want to add something do it here
+@import "custom";

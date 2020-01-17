@@ -1,6 +1,7 @@
 <?php
 
 Breadcrumbs::for('log-viewer::dashboard', function ($trail) {
+    $trail->parent('admin.dashboard');
     $trail->push(__('menus.backend.log-viewer.main'), url('admin/log-viewer'));
 });
 

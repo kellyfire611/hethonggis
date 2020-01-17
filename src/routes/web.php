@@ -7,6 +7,12 @@ use App\Http\Controllers\LanguageController;
  * Routes that are used between both frontend and backend.
  */
 
+ Route::get('test', function() {
+    $str = "Cần Thơ - Bình Thủy";
+    $arr = explode("-", $str);
+    dd($arr);
+ });
+
 // Switch between the included languages
 Route::get('lang/{lang}', [LanguageController::class, 'swap']);
 
@@ -22,7 +28,7 @@ Route::group(['namespace' => 'Frontend', 'as' => 'frontend.'], function () {
  * Backend Routes
  * Namespaces indicate folder structure
  */
-Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
+Route::group(['namespace' => 'Backend', 'prefix' => 'admin', 'as' => 'admin.'], function () {
     /*
      * These routes need view-backend permission
      * (good if you want to allow more than one group in the backend,
