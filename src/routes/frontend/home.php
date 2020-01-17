@@ -3,6 +3,7 @@
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\DiaDiemController;
+use App\Http\Controllers\Frontend\TourDuLichController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\User\AccountController;
 use App\Http\Controllers\Frontend\User\ProfileController;
@@ -18,6 +19,11 @@ Route::post('contact/send', [ContactController::class, 'send'])->name('contact.s
 
 // Pages
 Route::get('pages/{slug}', [PageController::class, 'show'])->name('pages.show');
+
+// Tour Du lịch
+Route::get('/tourdulich', [TourDuLichController::class, 'index'])->name('tourdulich.index');
+Route::get('tourdulich/{tourdulich}/', [TourDuLichController::class, 'show'])->name('tourdulich.show');
+Route::post('tourdulich/{tourdulich}/goidanhgia/', [TourDuLichController::class, 'goidanhgia'])->name('tourdulich.goidanhgia');
 
 // Địa điểm
 Route::get('/diadiem', [DiaDiemController::class, 'index'])->name('diadiem.index');

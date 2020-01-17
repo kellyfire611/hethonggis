@@ -12,7 +12,9 @@ use App\Models\QuanHuyen;
 use App\Models\XaPhuong;
 use App\Models\QuangCao;
 use App\Http\Controllers\Controller;
+use App\Models\TourDuLich;
 use App\Repositories\Backend\DiaDiemRepository;
+use App\Repositories\Backend\TourDuLichRepository;
 
 /**
  * Class HomeController.
@@ -23,14 +25,16 @@ class HomeController extends Controller
      * @var DiaDiemRepository
      */
     protected $DiaDiemRepository;
+    protected $TourDuLichRepository;
 
     /**
      * DiaDiemController constructor.
      *
      * @param DiaDiemRepository $DiaDiemRepository
      */
-    public function __construct(DiaDiemRepository $DiaDiemRepository)
+    public function __construct(DiaDiemRepository $DiaDiemRepository, TourDuLichRepository $TourDuLichRepository)
     {
+        $this->TourDuLichRepository = $TourDuLichRepository;
         $this->DiaDiemRepository = $DiaDiemRepository;
     }
 
@@ -39,6 +43,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // Get Tour du lịch
+        $tourdulichs = TourDuLich::take(12)->get();
+
         $diadiems = DiaDiem::take(12)->get();
 
         foreach($diadiems as $diadiem)
@@ -80,6 +87,7 @@ class HomeController extends Controller
 
         $diadiems = $diadiems->sortByDesc('diemtrungbinh');
         return view('frontend.index')
+            ->with('tourdulichs', $tourdulichs)
             ->with('diadiems', $diadiems)
             ->with('topmonans', $topmonans)
             ->with('quangcaos', $quangcaos);

@@ -24,7 +24,7 @@ class TourDuLich extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['matour', 'tentour', 'giatour_nguoilon', 'giatour_treem', 'diemkhoihanh_ten', 'diemkhoihanh_id_quanhuyen', 'diemkhoihanh_toado', 'diemden_ten', 'diemden_id_quanhuyen', 'diemden_toado', 'songaytour', 'hinhanh'];
+    protected $fillable = ['matourdulich', 'tentourdulich', 'giatour_nguoilon', 'giatour_treem', 'diemkhoihanh_ten', 'diemkhoihanh_id_quanhuyen', 'diemkhoihanh_toado', 'diemden_ten', 'diemden_id_quanhuyen', 'diemden_toado', 'songaytour', 'hinhanh'];
 
     /**
      * @return string
@@ -78,7 +78,8 @@ class TourDuLich extends Eloquent
 
     public function diemthamquans()
     {
-      return $this->hasMany(DiaDiem::class, 'id_tourdulich', 'id_tourdulich');
+      //return $this->hasMany(DiaDiem::class, 'id_tourdulich', 'id_tourdulich');
+      return $this->belongsToMany(DiaDiem::class, 'tourdulich_diemthamquan', 'id_tour', 'id_diemthamquan');
     }
 
     public function diachi()

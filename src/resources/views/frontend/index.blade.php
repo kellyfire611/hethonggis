@@ -89,6 +89,62 @@
 					<div class="row d-flex justify-content-center">
 						<div class="menu-content col-lg-8">
 							<div class="title text-center">
+								<h1 class="mb-10">Các Tour Du lịch hot nhất</h1>
+								<p>Được tuyển chọn với niềm tin yêu tuyệt đối từ Quý khách hàng</p>
+							</div>
+						</div>
+					</div>						
+					<div class="row">
+                        @foreach($tourdulichs as $tourdulich)
+						<div class="single-dish col-lg-3">
+							<div class="thumb box-ratio">
+                                <div class="box-ratio-content">
+									<a href="{{ route('frontend.tourdulich.show', ['tourdulich' => $tourdulich->id]) }}">
+										<img class="img-fluid" src="{{ asset('storage/'.$tourdulich->hinhanh) }}" alt="">
+                                    </a>
+                                </div>
+                            </div>
+							<h4 class="text-uppercase pt-10"><a href="{{ route('frontend.tourdulich.show', ['tourdulich' => $tourdulich->id]) }}">{{ $tourdulich->tentourdulich }}</a></h4>
+							<p>
+							Từ: <b>{{ $tourdulich->diemkhoihanh_ten }}</b> - Đến: <b>{{ $tourdulich->diemden_ten }}</b>
+							<input type="number" class="rating" value="{{ $tourdulich->diemtrungbinh }}" data-step="1" data-size="xs" data-readonly="true" data-theme="krajee-svg" data-show-clear="false" data-show-caption="true" data-language="vi" />
+								Giá người lớn: {{ $tourdulich->giatour_nguoilon }} <br />
+								Giá trẻ em: {{ $tourdulich->giatour_treem }}
+							</p>
+						</div>
+                        @endforeach
+					</div>
+				</div>	
+			</section>
+			<!-- End top-dish Area -->
+
+<!-- Start top-dish Area -->
+<section class="top-dish-area section-gap" id="dish">
+				<div class="container">
+				<?php
+				$vertical_ads = $quangcaos->where('kieu', 'vertical-banner-sidebar')->take(2);
+				?>
+				<div class="clearfix">
+				@foreach($vertical_ads as $quangcao)
+					@if($quangcao == $vertical_ads->first())
+					<div class="vertical-banner-sidebar-left">
+						<a href="{{ $quangcao->url }}">
+							<img src="{{ asset('storage/'.$quangcao->anhdaidien) }}" class="img-fluid"/>
+						</a>
+					</div>
+					@else
+					<div class="vertical-banner-sidebar-right">
+						<a href="{{ $quangcao->url }}">
+							<img src="{{ asset('storage/'.$quangcao->anhdaidien) }}" class="img-fluid"/>
+						</a>
+					</div>
+					@endif
+				@endforeach
+	
+				</div>
+					<div class="row d-flex justify-content-center">
+						<div class="menu-content col-lg-8">
+							<div class="title text-center">
 								<h1 class="mb-10">Các địa điểm Du lịch hot nhất</h1>
 								<p>Được tuyển chọn với niềm tin yêu tuyệt đối từ Thực khách</p>
 							</div>
