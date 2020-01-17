@@ -80,7 +80,7 @@ class BaoCaoController extends Controller
         // 2019-07-21    50,000,000
         // 2019-07-20    40,000,000
         $sql = '
-            SELECT tt.NAME_1 AS TenTinhThanh, COUNT(*) AS SoLuong
+            SELECT tt.ID_1, tt.NAME_1 AS TenTinhThanh, COUNT(*) AS SoLuong
             FROM diemthamquan dtq
             JOIN quanhuyen_attributes qh ON dtq.id_quanhuyen = qh.ID_2
             JOIN tinh_attributes tt ON qh.ID_1 = tt.ID_1
@@ -88,30 +88,37 @@ class BaoCaoController extends Controller
         if($parameter['idTinhThanh'] > 0) {
             $sql .= ' WHERE tt.ID_1 = :idTinhThanh';
         }
-        $sql .= ' GROUP BY tt.NAME_1;';
+        $sql .= ' GROUP BY tt.ID_1, tt.NAME_1;';
 
         $data = DB::select($sql, $parameter);
 
-        // Get các tọa độ điểm POLYGON tỉnh thành
-        $sqlCoordinates = '
-            SELECT y, x FROM tinh_nodes WHERE shapeid = 20;
-        ';
-        $dataCoordinates = collect(DB::select($sqlCoordinates, $parameter));
-        // dd($dataCoordinates[0]->x);
-        $coordinates = $dataCoordinates->map(function ($event, $key) {
-            
-            return [ $event->y, $event->x ];
-            
-        })->values();
-        // dd($coordinates[0]);
+        $lstIdTinhThanhs = collect($data)->map(function ($event, $key) {
+            return $event->ID_1;
+        })->all();
+        // dd($collectData);
 
-        // $data['map'] = $coordinates;//json_encode($coordinates);
+        // Get các tọa độ điểm POLYGON tỉnh thành
+        $resultDataMap = [];
+        foreach($lstIdTinhThanhs as $idTinhThanh) {
+            $parameterMap = [
+                'idTinhThanh' => $idTinhThanh,
+            ];
+            $sqlCoordinates = '
+                SELECT y, x FROM tinh_nodes WHERE shapeid = :idTinhThanh;
+            ';
+            $dataCoordinates = collect(DB::select($sqlCoordinates, $parameterMap));
+            $coordinates = $dataCoordinates->map(function ($event, $key) {
+                return [ $event->y, $event->x ];
+            })->values();
+
+            $resultDataMap[] = $coordinates;
+        }
 
         // JSON
         return response()->json(array(
             'code' => 200, 
             'data' => $data,
-            'map' => $coordinates
+            'map' => $resultDataMap
         ));
     }
 }
