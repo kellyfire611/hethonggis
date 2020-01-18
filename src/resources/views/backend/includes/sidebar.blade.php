@@ -73,6 +73,25 @@
                 </ul>
             </li>
 
+            <!-- Menu Tour du lịch -->
+            <li class="divider"></li>
+
+            <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/tourdulich*'), 'open') }}">
+                <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/tourdulich*')) }}" href="#">
+                    <i class="nav-icon icon-list"></i> Quản lý Tour Du lịch
+                </a>
+
+                <ul class="nav-dropdown-items">
+                    <li class="nav-item">
+                        <a class="nav-link {{ active_class(Active::checkUriPattern('admin/tourdulich')) }}" href="{{ route('admin.tourdulich.index') }}">
+                            Danh sách Tour du lịch
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="divider"></li>
+
             <!-- Menu Địa điểm -->
             <li class="divider"></li>
 

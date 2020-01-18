@@ -2,57 +2,57 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\DiaDiem;
+use App\Models\TourDuLich;
 use App\Models\DichVu;
 use App\Models\DiaChi;
 use App\Models\TinhThanh;
 use App\Models\QuanHuyen;
 use App\Models\XaPhuong;
 use App\Http\Controllers\Controller;
-use App\Repositories\Backend\DiaDiemRepository;
-use App\Http\Requests\Backend\DiaDiem\StoreDiaDiemRequest;
-use App\Http\Requests\Backend\DiaDiem\ManageDiaDiemRequest;
-use App\Http\Requests\Backend\DiaDiem\UpdateDiaDiemRequest;
+use App\Repositories\Backend\TourDuLichRepository;
+use App\Http\Requests\Backend\TourDuLich\StoreTourDuLichRequest;
+use App\Http\Requests\Backend\TourDuLich\ManageTourDuLichRequest;
+use App\Http\Requests\Backend\TourDuLich\UpdateTourDuLichRequest;
 
 /**
- * Class DiaDiemController.
+ * Class TourDuLichController.
  */
-class DiaDiemController extends Controller
+class TourDuLichController extends Controller
 {
     /**
-     * @var DiaDiemRepository
+     * @var TourDuLichRepository
      */
-    protected $DiaDiemRepository;
+    protected $TourDuLichRepository;
 
     /**
-     * DiaDiemController constructor.
+     * TourDuLichController constructor.
      *
-     * @param DiaDiemRepository $DiaDiemRepository
+     * @param TourDuLichRepository $TourDuLichRepository
      */
-    public function __construct(DiaDiemRepository $DiaDiemRepository)
+    public function __construct(TourDuLichRepository $TourDuLichRepository)
     {
-        $this->DiaDiemRepository = $DiaDiemRepository;
+        $this->TourDuLichRepository = $TourDuLichRepository;
     }
 
     /**
-     * @param ManageDiaDiemRequest $request
+     * @param ManageTourDuLichRequest $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(ManageDiaDiemRequest $request)
+    public function index(ManageTourDuLichRequest $request)
     {
-        return view('backend.diaDiem.index')
-            ->with('diadiems', $this->DiaDiemRepository->getActivePaginated(25, 'id', 'asc'));
+        return view('backend.tourdulich.index')
+            ->with('tourdulichms', $this->TourDuLichRepository->getActivePaginated(25, 'id', 'asc'));
     }
 
     /**
-     * @param ManageDiaDiemRequest    $request
+     * @param ManageTourDuLichRequest    $request
      * @param RoleRepository       $roleRepository
      * @param PermissionRepository $permissionRepository
      *
      * @return mixed
      */
-    public function create(ManageDiaDiemRequest $request)
+    public function create(ManageTourDuLichRequest $request)
     {
         $diachis = [];
         // $tinhthanh = TinhThanh::all();
@@ -74,23 +74,23 @@ class DiaDiemController extends Controller
         // }
         //dd($diachis[0]['all']);
 
-        return view('backend.diaDiem.create')
+        return view('backend.tourdulich.create')
             ->with('quanhuyens', $quanhuyens)
             ->with('diachis', $diachis);
     }
 
     /**
-     * @param StoreDiaDiemRequest $request
+     * @param StoreTourDuLichRequest $request
      *
      * @return mixed
      * @throws \Throwable
      */
-    public function store(StoreDiaDiemRequest $request)
+    public function store(StoreTourDuLichRequest $request)
     {
         // dd($request);
         $inputs = $request->only(
             'madiemthamquan',
-            'tendiadiem',
+            'tentourdulichm',
             'motangan',
             'gioithieu',
             'tukhoa',
@@ -171,24 +171,24 @@ class DiaDiemController extends Controller
         // }
         // $inputs['dichvus'] = $dichvus;
 
-        $this->DiaDiemRepository->create($inputs);
+        $this->TourDuLichRepository->create($inputs);
 
-        return redirect()->route('admin.diadiem.index')->withFlashSuccess('Thêm mới Địa điểm thành công');
+        return redirect()->route('admin.tourdulichm.index')->withFlashSuccess('Thêm mới Địa điểm thành công');
     }
 
     /**
-     * @param ManageDiaDiemRequest $request
-     * @param DiaDiem              $DiaDiem
+     * @param ManageTourDuLichRequest $request
+     * @param TourDuLich              $TourDuLich
      *
      * @return mixed
      */
-    public function show(ManageDiaDiemRequest $request, $_id)
+    public function show(ManageTourDuLichRequest $request, $_id)
     {
-        $DiaDiem = DiaDiem::find($_id);
+        $TourDuLich = TourDuLich::find($_id);
 
-        $path = $DiaDiem->anhdaidien;
+        $path = $TourDuLich->anhdaidien;
         $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = $DiaDiem->anhdaidien_blob;
+        $data = $TourDuLich->anhdaidien_blob;
         if(empty($data))
         {
             $base64 = asset('storage/'.$path);
@@ -198,22 +198,22 @@ class DiaDiemController extends Controller
             $base64 = 'data:image/' . $type . ';base64,' . $data;
         }
 
-        return view('backend.diadiem.show')
-            ->with('diadiem', $DiaDiem)
+        return view('backend.tourdulichm.show')
+            ->with('tourdulichm', $TourDuLich)
             ->with('anhdaidien_base64', $base64);
     }
 
     /**
-     * @param ManageDiaDiemRequest    $request
+     * @param ManageTourDuLichRequest    $request
      * @param RoleRepository       $roleRepository
      * @param PermissionRepository $permissionRepository
-     * @param DiaDiem                 $DiaDiem
+     * @param TourDuLich                 $TourDuLich
      *
      * @return mixed
      */
-    public function edit(ManageDiaDiemRequest $request, $_id)
+    public function edit(ManageTourDuLichRequest $request, $_id)
     {
-        $DiaDiem = DiaDiem::find($_id);
+        $TourDuLich = TourDuLich::find($_id);
         $quanhuyens = QuanHuyen::all();
         // $diachis = [];
         // $tinhthanh = TinhThanh::all();
@@ -232,36 +232,36 @@ class DiaDiemController extends Controller
         //         }
         //     }
         // }
-        // $DiaDiem->diachiedit = $DiaDiem->diachi->tinhthanh.' - '.$DiaDiem->diachi->quanhuyen.' - '.$DiaDiem->diachi->xaphuong;
+        // $TourDuLich->diachiedit = $TourDuLich->diachi->tinhthanh.' - '.$TourDuLich->diachi->quanhuyen.' - '.$TourDuLich->diachi->xaphuong;
         // $diachis[] = [
-        //     'tinhthanh' => $DiaDiem->diachi->tinhthanh,
-        //     'quanhuyen' => $DiaDiem->diachi->quanhuyen,
-        //     'xaphuong' => $DiaDiem->diachi->xaphuong,
-        //     'all' => $DiaDiem->diachi->tinhthanh.' - '.$DiaDiem->diachi->quanhuyen.' - '.$DiaDiem->diachi->xaphuong
+        //     'tinhthanh' => $TourDuLich->diachi->tinhthanh,
+        //     'quanhuyen' => $TourDuLich->diachi->quanhuyen,
+        //     'xaphuong' => $TourDuLich->diachi->xaphuong,
+        //     'all' => $TourDuLich->diachi->tinhthanh.' - '.$TourDuLich->diachi->quanhuyen.' - '.$TourDuLich->diachi->xaphuong
         // ];
-        // dd($DiaDiem);
-        return view('backend.diadiem.edit')
-            ->with('diadiem', $DiaDiem)
+        // dd($TourDuLich);
+        return view('backend.tourdulichm.edit')
+            ->with('tourdulichm', $TourDuLich)
             ->with('quanhuyens', $quanhuyens);
             // ->with('diachis', $diachis);
     }
 
     /**
-     * @param UpdateDiaDiemRequest $request
-     * @param DiaDiem              $DiaDiem
+     * @param UpdateTourDuLichRequest $request
+     * @param TourDuLich              $TourDuLich
      *
      * @return mixed
      * @throws \App\Exceptions\GeneralException
      * @throws \Throwable
      */
-    public function update(UpdateDiaDiemRequest $request, $_id)
+    public function update(UpdateTourDuLichRequest $request, $_id)
     {
         // dd($request);
         // Địa điểm
-        $DiaDiem = DiaDiem::find($_id);
+        $TourDuLich = TourDuLich::find($_id);
         $inputs = $request->only(
             'madiemthamquan',
-            'tendiadiem',
+            'tentourdulichm',
             'motangan',
             'gioithieu',
             'tukhoa',
@@ -310,7 +310,7 @@ class DiaDiemController extends Controller
         }
         else
         {
-            $inputs['anhdaidien'] = $DiaDiem->anhdaidien;
+            $inputs['anhdaidien'] = $TourDuLich->anhdaidien;
         }
         
         // Dịch vụ
@@ -343,27 +343,27 @@ class DiaDiemController extends Controller
 
         //dd($request, $inputs);
         // Save
-        $DiaDiemUpdated = $this->DiaDiemRepository->update($DiaDiem, $inputs);
-        if($DiaDiemUpdated)
+        $TourDuLichUpdated = $this->TourDuLichRepository->update($TourDuLich, $inputs);
+        if($TourDuLichUpdated)
         {
             // Xóa hình cũ để tránh rác
             //Storage::delete('public/uploads/img/' . $sp->sp_hinh);
         }
 
-        return redirect()->route('admin.diadiem.index')->withFlashSuccess('Cập nhật Địa điểm thành công!');
+        return redirect()->route('admin.tourdulichm.index')->withFlashSuccess('Cập nhật Địa điểm thành công!');
     }
 
     /**
-     * @param ManageDiaDiemRequest $request
-     * @param DiaDiem              $DiaDiem
+     * @param ManageTourDuLichRequest $request
+     * @param TourDuLich              $TourDuLich
      *
      * @return mixed
      * @throws \Exception
      */
-    public function destroy(ManageDiaDiemRequest $request, $_id)
+    public function destroy(ManageTourDuLichRequest $request, $_id)
     {
-        $this->DiaDiemRepository->deleteById($_id);
+        $this->TourDuLichRepository->deleteById($_id);
 
-        return redirect()->route('admin.diadiem.index')->withFlashSuccess('Xóa địa điểm thành công');
+        return redirect()->route('admin.tourdulichm.index')->withFlashSuccess('Xóa địa điểm thành công');
     }
 }

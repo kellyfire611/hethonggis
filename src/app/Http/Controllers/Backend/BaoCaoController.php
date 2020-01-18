@@ -100,11 +100,14 @@ class BaoCaoController extends Controller
         // Get các tọa độ điểm POLYGON tỉnh thành
         $resultDataMap = [];
         foreach($lstIdTinhThanhs as $idTinhThanh) {
+
+            $tinhThanh = TinhThanh::find($idTinhThanh);
+
             $parameterMap = [
-                'idTinhThanh' => $idTinhThanh,
+                'shapeid' => $tinhThanh->shapeid,
             ];
             $sqlCoordinates = '
-                SELECT y, x FROM tinh_nodes WHERE shapeid = :idTinhThanh;
+                SELECT y, x FROM tinh_nodes WHERE shapeid = :shapeid;
             ';
             $dataCoordinates = collect(DB::select($sqlCoordinates, $parameterMap));
             $coordinates = $dataCoordinates->map(function ($event, $key) {

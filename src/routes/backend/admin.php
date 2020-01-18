@@ -4,6 +4,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\TinhThanhController;
 use App\Http\Controllers\Backend\TimKiemController;
 use App\Http\Controllers\Backend\DiaDiemController;
+use App\Http\Controllers\Backend\TourDuLichController;
 use App\Http\Controllers\Backend\PageController;
 use App\Http\Controllers\Backend\QuangCaoController;
 use App\Http\Controllers\Backend\BaoCaoController;
@@ -50,6 +51,15 @@ Route::get('diadiem/{diadiem}/', [DiaDiemController::class, 'show'])->name('diad
 Route::get('diadiem/{diadiem}/edit', [DiaDiemController::class, 'edit'])->name('diadiem.edit');
 Route::patch('diadiem/{diadiem}/', [DiaDiemController::class, 'update'])->name('diadiem.update');
 Route::delete('diadiem/{diadiem}/', [DiaDiemController::class, 'destroy'])->name('diadiem.destroy');
+
+// Route Tour Du lịch
+Route::get('tourdulich', [TourDuLichController::class, 'index'])->name('tourdulich.index');
+Route::get('tourdulich/create', [TourDuLichController::class, 'create'])->name('tourdulich.create');
+Route::post('tourdulich', [TourDuLichController::class, 'store'])->name('tourdulich.store');
+Route::get('tourdulich/{tourdulich}/', [TourDuLichController::class, 'show'])->name('tourdulich.show');
+Route::get('tourdulich/{tourdulich}/edit', [TourDuLichController::class, 'edit'])->name('tourdulich.edit');
+Route::patch('tourdulich/{tourdulich}/', [TourDuLichController::class, 'update'])->name('tourdulich.update');
+Route::delete('tourdulich/{tourdulich}/', [TourDuLichController::class, 'destroy'])->name('tourdulich.destroy');
 
 
 // Route Báo cáo

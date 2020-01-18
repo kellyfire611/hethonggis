@@ -111,6 +111,32 @@ Breadcrumbs::for('admin.diadiem.edit', function ($trail, $id) {
     $trail->push('Sửa địa điểm', route('admin.diadiem.edit', $id));
 });
 
+// Tour du lịch
+Breadcrumbs::for('admin.tourdulich.index', function ($trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push('Tour du lịch', route('admin.tourdulich.index'));
+});
+
+Breadcrumbs::for('admin.tourdulich.deleted', function ($trail) {
+    $trail->parent('admin.tourdulich.index');
+    $trail->push('Tour du lịch đã xóa', route('admin.tourdulich.deleted'));
+});
+
+Breadcrumbs::for('admin.tourdulich.create', function ($trail) {
+    $trail->parent('admin.tourdulich.index');
+    $trail->push('Thêm mới Tour du lịch', route('admin.tourdulich.create'));
+});
+
+Breadcrumbs::for('admin.tourdulich.show', function ($trail, $id) {
+    $trail->parent('admin.tourdulich.index');
+    $trail->push('Xem Tour du lịch', route('admin.tourdulich.show', $id));
+});
+
+Breadcrumbs::for('admin.tourdulich.edit', function ($trail, $id) {
+    $trail->parent('admin.tourdulich.index');
+    $trail->push('Sửa Tour du lịch', route('admin.tourdulich.edit', $id));
+});
+
 // Báo cáo
 Breadcrumbs::for('admin.baocao.soluongdiemthamquan', function ($trail) {
     $trail->parent('admin.dashboard');

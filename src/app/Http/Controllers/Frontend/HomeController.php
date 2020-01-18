@@ -47,9 +47,9 @@ class HomeController extends Controller
     public function index()
     {
         // Get Tour du lịch
-        $tourdulichs = TourDuLich::take(12)->get();
+        $tourdulichs = TourDuLich::take(30)->get();
 
-        $diadiems = DiaDiem::take(12)->get();
+        $diadiems = DiaDiem::take(30)->get();
 
         foreach ($diadiems as $diadiem) {
             $diem = 0;

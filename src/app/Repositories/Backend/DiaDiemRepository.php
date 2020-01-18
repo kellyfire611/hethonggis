@@ -105,10 +105,11 @@ class DiaDiemRepository extends BaseRepository
     {
         // dd($data);
         $DiaDiem = parent::create([
+            'madiemthamquan' => $data['madiemthamquan'],
             'tendiadiem' => $data['tendiadiem'],
             'motangan' => $data['motangan'],
             'anhdaidien' => $data['anhdaidien'],
-            'anhdaidien_blob' => $data['anhdaidien_blob'],
+            // 'anhdaidien_blob' => $data['anhdaidien_blob'],
             'gioithieu' => $data['gioithieu'],
             'tukhoa' => $data['tukhoa'],
             'dienthoai' => $data['dienthoai'],
@@ -116,15 +117,16 @@ class DiaDiemRepository extends BaseRepository
             'giomocua' => $data['giomocua'],
             'giodongcua' => $data['giodongcua'],
             'GPS' => $data['GPS'],
-            'trangthai' => $data['trangthai']
+            'trangthai' => $data['trangthai'],
+            'id_quanhuyen' => $data['id_quanhuyen'],
         ]);
         
-        $DiaDiem->diachi()->save($data['diachi']);
+        // $DiaDiem->diachi()->save($data['diachi']);
 
-        foreach($data['dichvus'] as $key=>$value)
-        {
-            $DiaDiem->dichvus()->save($value);
-        }
+        // foreach($data['dichvus'] as $key=>$value)
+        // {
+        //     $DiaDiem->dichvus()->save($value);
+        // }
 
         if ($DiaDiem) {
             return $DiaDiem;
@@ -145,9 +147,11 @@ class DiaDiemRepository extends BaseRepository
     public function update(DiaDiem $DiaDiem, array $data) : DiaDiem
     {   
         if ($DiaDiem->update([
+            'madiemthamquan' => $data['madiemthamquan'],
             'tendiadiem' => $data['tendiadiem'],
             'motangan' => $data['motangan'],
             'anhdaidien' => $data['anhdaidien'],
+            // 'anhdaidien_blob' => $data['anhdaidien_blob'],
             'gioithieu' => $data['gioithieu'],
             'tukhoa' => $data['tukhoa'],
             'dienthoai' => $data['dienthoai'],
@@ -155,20 +159,21 @@ class DiaDiemRepository extends BaseRepository
             'giomocua' => $data['giomocua'],
             'giodongcua' => $data['giodongcua'],
             'GPS' => $data['GPS'],
-            'trangthai' => $data['trangthai']
+            'trangthai' => $data['trangthai'],
+            'id_quanhuyen' => $data['id_quanhuyen'],
         ])) {
             
-            $DiaDiem->diachi()->save($data['diachi']);
+            // $DiaDiem->diachi()->save($data['diachi']);
             
-            foreach($DiaDiem->dichvus as $key=>$value)
-            {
-                $DiaDiem->dichvus()->destroy($value);
-            }
+            // foreach($DiaDiem->dichvus as $key=>$value)
+            // {
+            //     $DiaDiem->dichvus()->destroy($value);
+            // }
 
-            foreach($data['dichvus'] as $key=>$value)
-            {
-                $DiaDiem->dichvus()->save($value);
-            }
+            // foreach($data['dichvus'] as $key=>$value)
+            // {
+            //     $DiaDiem->dichvus()->save($value);
+            // }
             
             return $DiaDiem;
         }

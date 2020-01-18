@@ -1,9 +1,9 @@
 @extends('backend.layouts.app')
 
-@section('title', app_name() . ' | ' . 'Quản lý Địa điểm')
+@section('title', app_name() . ' | ' . 'Quản lý Tour du lịch')
 
 @section('breadcrumb-links')
-    @include('backend.diadiem.includes.breadcrumb-links')
+    @include('backend.tourdulich.includes.breadcrumb-links')
 @endsection
 
 @section('content')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-sm-5">
                 <h4 class="card-title mb-0">
-                    Danh sách địa điểm
+                    Danh sách tour du lịch
                 </h4>
             </div><!--col-->
 
             <div class="col-sm-7">
-                @include('backend.diadiem.includes.header-buttons')
+                @include('backend.tourdulich.includes.header-buttons')
             </div><!--col-->
         </div><!--row-->
 
@@ -27,15 +27,15 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>Tên địa điểm</th>
+                            <th>Tên tour du lịch</th>
                             <th>@lang('labels.general.actions')</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($diadiems as $diadiem)
+                        @foreach($tourdulichs as $tourdulich)
                             <tr>
-                                <td>{!! $diadiem->tendiadiem !!}</td>
-                                <td>{!! $diadiem->action_buttons !!}</td>
+                                <td>{!! $tourdulich->tentourdulich !!}</td>
+                                <td>{!! $tourdulich->action_buttons !!}</td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -46,13 +46,13 @@
         <div class="row">
             <div class="col-7">
                 <div class="float-left">
-                    {!! $diadiems->total() !!} {{ trans_choice('Địa điểm', $diadiems->total()) }}
+                    {!! $tourdulichs->total() !!} {{ trans_choice('Địa điểm', $tourdulichs->total()) }}
                 </div>
             </div><!--col-->
 
             <div class="col-5">
                 <div class="float-right">
-                    {!! $diadiems->render() !!}
+                    {!! $tourdulichs->render() !!}
                 </div>
             </div><!--col-->
         </div><!--row-->
