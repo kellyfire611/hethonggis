@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use App\Models\DichVu;
 use App\Models\DiaChi;
 use App\Models\DanhGia;
+use App\Models\QuanHuyen;
 
 /**
  * Class TourDuLich.
@@ -85,6 +86,14 @@ class TourDuLich extends Eloquent
     public function diachi()
     {
       return $this->belongsTo(DiaChi::class);
+    }
+    public function diemkhoihanhquanhuyen()
+    {
+      return $this->belongsTo(QuanHuyen::class, 'diemkhoihanh_id_quanhuyen', 'ID_2');
+    }
+    public function diemdenquanhuyen()
+    {
+      return $this->belongsTo(QuanHuyen::class, 'diemden_id_quanhuyen', 'ID_2');
     }
 
     public function danhgias()

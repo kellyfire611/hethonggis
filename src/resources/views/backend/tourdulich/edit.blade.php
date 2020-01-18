@@ -3,14 +3,14 @@
 @section('title', 'Quản lý Địa điểm' . ' | ' . 'Sửa')
 
 @section('breadcrumb-links')
-    @include('backend.diadiem.includes.breadcrumb-links')
+    @include('backend.tourdulich.includes.breadcrumb-links')
 @endsection
 
 @push('after-styles')
 @endpush
 
 @section('content')
-{{ html()->modelForm($diadiem, 'PATCH', route('admin.diadiem.update', $diadiem->id))->class('form-horizontal quill-form')->acceptsFiles()->open() }}
+{{ html()->modelForm($tourdulich, 'PATCH', route('admin.tourdulich.update', $tourdulich->id))->class('form-horizontal quill-form')->acceptsFiles()->open() }}
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -25,66 +25,85 @@
 
             <div class="row mt-4 mb-4">
                 <div class="col">
-                    <div class="form-group row">
-                            {{ html()->label("Mã địa điểm")->class('col-md-2 form-control-label')->for('madiadiem') }}
+                <div class="form-group row">
+                            {{ html()->label("Mã Tour du lịch")->class('col-md-2 form-control-label')->for('matourdulich') }}
                             <div class="col-md-10">
-                                {{ html()->text('madiemthamquan')
+                                {{ html()->text('matourdulich')
                                     ->class('form-control')
-                                    ->placeholder("Nhập mã địa điểm")
+                                    ->placeholder("Nhập mã Tour du lịch")
                                     ->attribute('maxlength', 191)
                                     ->required()
                                     ->autofocus() }}
                             </div><!--col-->
                         </div><!--form-group-->
 
-                    <div class="form-group row">
-                    {{ html()->label("Tên địa điểm")->class('col-md-2 form-control-label')->for('tendiadiem') }}
-
-                        <div class="col-md-10">
-                            {{ html()->text('tendiadiem')
-                                ->class('form-control')
-                                ->placeholder(__('validation.attributes.backend.diadiem.tendiadiem'))
-                                ->attribute('maxlength', 191)
-                                ->required() }}
-                        </div><!--col-->
-                    </div><!--form-group-->
-
-                    <div class="form-group row">
-                            {{ html()->label("Mô tả ngắn")->class('col-md-2 form-control-label')->for('motangan') }}
+                        <div class="form-group row">
+                            {{ html()->label("Tên Tour du lịch")->class('col-md-2 form-control-label')->for('tentourdulich') }}
                             <div class="col-md-10">
-                                {{ html()->text('motangan')
+                                {{ html()->text('tentourdulich')
                                     ->class('form-control')
-                                    ->placeholder("Mô tả ngắn")
+                                    ->placeholder("Nhập tên Tour du lịch")
                                     ->attribute('maxlength', 191)
                                     ->required()
                                     ->autofocus() }}
                             </div><!--col-->
                         </div><!--form-group-->
 
-                    <div class="form-group row">
-                            {{ html()->label('Ảnh đại diện')->class('col-md-2 form-control-label')->for('anhdaidien') }}
+                        <div class="form-group row">
+                            {{ html()->label('Ảnh đại diện')->class('col-md-2 form-control-label')->for('hinhanh') }}
                             <div class="col-md-10">
                                 <div class="kv-avatar text-center">
                                     <div class="file-loading">
-                                        @if(empty($diadiem->anhdaidien))
-                                        <input id="anhdaidien-file" name="anhdaidien_file" type="file" required>
-                                        @else
-                                        <input id="anhdaidien-file" name="anhdaidien_file" type="file">
-                                        @endif
+                                        <input id="hinhanh-file" name="hinhanh_file" type="file">
                                     </div>
                                 </div>
-                                <div class="kv-avatar-hint"><small>Select file < 1500 KB</small></div>
-                                <div id="kv-avatar-errors-anhdaidien-file" class="center-block" style="display:none"></div>
+                                <div class="kv-avatar-hint"><small>Chọn file có kích cỡ < 1500 KB</small></div>
+                                <div id="kv-avatar-errors-hinhanh-file" class="center-block" style="display:none"></div>
                             </div>
                         </div><!--form-group-->
-
-                    
+                        
                         <div class="form-group row">
-                            {{ html()->label('Quận huyện')->class('col-md-2 form-control-label')->for('id_quanhuyen') }}
+                            {{ html()->label("Giá tour người lớn")->class('col-md-2 form-control-label')->for('giatour_nguoilon') }}
                             <div class="col-md-10">
-                                <select class="form-control" id="id_quanhuyen" name="id_quanhuyen">
+                                {{ html()->text('giatour_nguoilon')
+                                    ->class('form-control')
+                                    ->placeholder("Giá tour người lớn")
+                                    ->attribute('maxlength', 191)
+                                    ->required()
+                                    ->autofocus() }}
+                            </div><!--col-->
+                        </div><!--form-group-->
+
+                        <div class="form-group row">
+                            {{ html()->label("Giá tour trẻ em")->class('col-md-2 form-control-label')->for('giatour_treem') }}
+                            <div class="col-md-10">
+                                {{ html()->text('giatour_treem')
+                                    ->class('form-control')
+                                    ->placeholder("Giá tour trẻ em")
+                                    ->attribute('maxlength', 191)
+                                    ->required()
+                                    ->autofocus() }}
+                            </div><!--col-->
+                        </div><!--form-group-->
+
+                        <div class="form-group row">
+                            {{ html()->label("Tên điểm khởi hành")->class('col-md-2 form-control-label')->for('diemkhoihanh_ten') }}
+                            <div class="col-md-10">
+                                {{ html()->text('diemkhoihanh_ten')
+                                    ->class('form-control')
+                                    ->placeholder("Tên điểm khởi hành")
+                                    ->attribute('maxlength', 191)
+                                    ->required()
+                                    ->autofocus() }}
+                            </div><!--col-->
+                        </div><!--form-group-->
+
+                        <div class="form-group row">
+                            {{ html()->label('Quận huyện Khởi hành')->class('col-md-2 form-control-label')->for('diemkhoihanh_id_quanhuyen') }}
+                            <div class="col-md-10">
+                                <select class="form-control" id="diemkhoihanh_id_quanhuyen" name="diemkhoihanh_id_quanhuyen">
                                     @foreach($quanhuyens as $quanhuyen)
-                                    @if($diadiem->id_quanhuyen == $quanhuyen->ID_2)
+                                    @if($quanhuyen->ID_2 == $tourdulich->diemkhoihanh_id_quanhuyen)
                                     <option value="{{ $quanhuyen->ID_2 }}" selected>{{ $quanhuyen->NAME_1 }} - {{ $quanhuyen->NAME_2 }}</option>
                                     @else
                                     <option value="{{ $quanhuyen->ID_2 }}">{{ $quanhuyen->NAME_1 }} - {{ $quanhuyen->NAME_2 }}</option>
@@ -95,87 +114,64 @@
                         </div><!--form-group-->
 
                         <div class="form-group row">
-                            {{ html()->label('Từ khóa')->class('col-md-2 form-control-label')->for('tukhoa') }}
+                            {{ html()->label("Tọa độ điểm khởi hành")->class('col-md-2 form-control-label')->for('diemkhoihanh_toado_string') }}
                             <div class="col-md-10">
-                                {{ html()->text('tukhoa')
+                                {{ html()->text('diemkhoihanh_toado_string')
                                     ->class('form-control')
-                                    ->placeholder('Từ khóa')
+                                    ->placeholder("Tọa độ điểm khởi hành")
                                     ->attribute('maxlength', 191)
-                                    ->required() }}
-                            </div><!--col-->
-                        </div><!--form-group-->
-                        
-                        <div class="form-group row">
-                            {{ html()->label('Điện thoại')->class('col-md-2 form-control-label')->for('dienthoai') }}
-                            <div class="col-md-10">
-                                {{ html()->text('dienthoai')
-                                    ->class('form-control')
-                                    ->placeholder('Điện thoại')
-                                    ->attribute('maxlength', 191)
-                                    ->required() }}
-                            </div><!--col-->
-                        </div><!--form-group-->
-                        
-                        <div class="form-group row">
-                            {{ html()->label('Email')->class('col-md-2 form-control-label')->for('email') }}
-                            <div class="col-md-10">
-                                {{ html()->text('email')
-                                    ->class('form-control')
-                                    ->placeholder('Email')
-                                    ->attribute('maxlength', 191)
-                                    ->required() }}
-                            </div><!--col-->
-                        </div><!--form-group-->
-                        
-                        <div class="form-group row">
-                            {{ html()->label('Giờ mở cửa')->class('col-md-2 form-control-label')->for('giomocua') }}
-                            <div class="col-md-10">
-                                {{ html()->text('giomocua')
-                                    ->class('form-control')
-                                    ->placeholder('Giờ mở cửa')
-                                    ->attribute('maxlength', 191)
-                                    ->required() }}
-                            </div><!--col-->
-                        </div><!--form-group-->
-                        
-                        <div class="form-group row">
-                            {{ html()->label('Giờ đóng cửa')->class('col-md-2 form-control-label')->for('giodongcua') }}
-                            <div class="col-md-10">
-                                {{ html()->text('giodongcua')
-                                    ->class('form-control')
-                                    ->placeholder('Giờ đóng cửa')
-                                    ->attribute('maxlength', 191)
-                                    ->required() }}
-                            </div><!--col-->
-                        </div><!--form-group-->
-                        
-                        <div class="form-group row">
-                            {{ html()->label('GPS')->class('col-md-2 form-control-label')->for('Tọa độ GPS') }}
-                            <div class="col-md-10">
-                                {{ html()->text('GPS')
-                                    ->class('form-control')
-                                    ->placeholder('Tọa độ GPS')
-                                    ->attribute('maxlength', 191)
-                                    ->required() }}
+                                    ->required()
+                                    ->autofocus() }}
                             </div><!--col-->
                         </div><!--form-group-->
 
                         <div class="form-group row">
-                            {{ html()->label('Duyệt')->class('col-md-2 form-control-label')->for('trangthai') }}
+                            {{ html()->label("Tên điểm đến")->class('col-md-2 form-control-label')->for('diemden_ten') }}
                             <div class="col-md-10">
-                                @if($diadiem->trangthai == '1')
-                                <input type="checkbox" name="trangthai" value="1" checked />
-                                @else
-                                <input type="checkbox" name="trangthai" value="0" />
-                                @endif
+                                {{ html()->text('diemden_ten')
+                                    ->class('form-control')
+                                    ->placeholder("Tên điểm đến")
+                                    ->attribute('maxlength', 191)
+                                    ->required()
+                                    ->autofocus() }}
                             </div><!--col-->
                         </div><!--form-group-->
 
                         <div class="form-group row">
-                            {{ html()->label('Giới thiệu')->class('col-md-2 form-control-label')->for('gioithieu') }}
+                            {{ html()->label('Quận huyện Đến')->class('col-md-2 form-control-label')->for('diemden_id_quanhuyen') }}
                             <div class="col-md-10">
-                                <input name="gioithieu" type="hidden">
-                                <div id="gioithieu-editor-container">{!! $diadiem->gioithieu !!}</div>
+                                <select class="form-control" id="diemden_id_quanhuyen" name="diemden_id_quanhuyen">
+                                    @foreach($quanhuyens as $quanhuyen)
+                                    @if($quanhuyen->ID_2 == $tourdulich->diemden_id_quanhuyen)
+                                    <option value="{{ $quanhuyen->ID_2 }}" selected>{{ $quanhuyen->NAME_1 }} - {{ $quanhuyen->NAME_2 }}</option>
+                                    @else
+                                    <option value="{{ $quanhuyen->ID_2 }}">{{ $quanhuyen->NAME_1 }} - {{ $quanhuyen->NAME_2 }}</option>
+                                    @endif
+                                    @endforeach
+                                </select>
+                            </div><!--col-->
+                        </div><!--form-group-->
+
+                        <div class="form-group row">
+                            {{ html()->label("Tọa độ điểm đến")->class('col-md-2 form-control-label')->for('diemden_toado_string') }}
+                            <div class="col-md-10">
+                                {{ html()->text('diemden_toado_string')
+                                    ->class('form-control')
+                                    ->placeholder("Tọa độ điểm đến")
+                                    ->attribute('maxlength', 191)
+                                    ->required()
+                                    ->autofocus() }}
+                            </div><!--col-->
+                        </div><!--form-group-->
+                        
+                        <div class="form-group row">
+                            {{ html()->label('Số ngày Tour')->class('col-md-2 form-control-label')->for('songaytour') }}
+                            <div class="col-md-10">
+                                {{ html()->text('songaytour')
+                                    ->class('form-control')
+                                    ->placeholder('Số ngày tour')
+                                    ->attribute('maxlength', 191)
+                                    ->required() }}
                             </div><!--col-->
                         </div><!--form-group-->
                 </div><!--col-->
@@ -190,105 +186,13 @@
                 </div>
             </div> -->
 
-            <!-- <div id="dynamic_field">
-                <?php
-                $i = 0;
-                ?>
-                @foreach($diadiem->dichvus as $dichvu)
-                @if($dichvu == $diadiem->dichvus->first())
-                <div class="row border-bottom mt-4" id="dynamic-row-{{ $i }}">
-                    <div class="col col-md-3 text-center">
-                        @if(!empty($dichvu->anhdaidien))
-                        <input type="hidden" name="dichvu_anhdaidien_old_file[]" value="{{ $dichvu->anhdaidien }}"/>
-                        @endif
-                        <div class="kv-avatar text-center">
-                            <div class="file-loading">
-                                @if(empty($dichvu->anhdaidien))
-                                <input id="dichvu-anhdaidien-file-{{ $i }}" name="dichvu_anhdaidien_file[]" type="file" required>
-                                @else
-                                <input id="dichvu-anhdaidien-file-{{ $i }}" name="dichvu_anhdaidien_file[]" type="file">
-                                @endif
-                            </div>
-                        </div>
-                        <div class="kv-avatar-hint"><small>Select file < 1500 KB</small></div>
-                        <div id="kv-avatar-errors-dichvu-anhdaidien-file" class="center-block" style="display:none"></div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group row">
-                            <div class="col">
-                                <input type="text" name="dichvu_tendichvu[]" id="dichvu-tendichvu-{{ $i }}" placeholder="Tên dịch vụ" class="form-control" value="{{ $dichvu->tendichvu }}" />
-                            </div>
-                            <div class="col">
-                                <input type="text" name="dichvu_motangan[]" id="dichvu-motangan-{{ $i }}" placeholder="Mô tả ngắn" class="form-control" value="{{ $dichvu->motangan }}" />
-                            </div>
-                            <div class="col">
-                                <input type="number" name="dichvu_gia[]" id="dichvu-gia-{{ $i }}" placeholder="Giá" cleave-auto-unmask="true" class="form-control input-element-number number" value="{{ $dichvu->gia }}" />
-                            </div>
-                            <div class="col col-md-auto">
-                                <button type="button" name="add" id="add" class="btn btn-success">+</button>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col">
-                                <input type="text" name="dichvu_gioithieu[]" id="dichvu-gioithieu-{{ $i }}" placeholder="Giới thiệu" class="form-control" value="{{ $dichvu->gioithieu }}" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @else
-                <div class="row border-bottom mt-4" id="dynamic-row-{{ $i }}">
-                    <div class="col col-md-3 text-center">
-                        @if(!empty($dichvu->anhdaidien))
-                        <input type="hidden" name="dichvu_anhdaidien_old_file[]" value="{{ $dichvu->anhdaidien }}"/>
-                        @endif
-                        <div class="kv-avatar text-center">
-                            <div class="file-loading">
-                                @if(empty($dichvu->anhdaidien))
-                                <input id="dichvu-anhdaidien-file-{{ $i }}" name="dichvu_anhdaidien_file[]" type="file" required>
-                                @else
-                                <input id="dichvu-anhdaidien-file-{{ $i }}" name="dichvu_anhdaidien_file[]" type="file">
-                                @endif
-                            </div>
-                        </div>
-                        <div class="kv-avatar-hint"><small>Select file < 1500 KB</small></div>
-                        <div id="kv-avatar-errors-dichvu-anhdaidien-file" class="center-block" style="display:none"></div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group row">
-                            <div class="col">
-                                <input type="text" name="dichvu_tendichvu[]" id="dichvu-tendichvu-{{ $i }}" placeholder="Tên dịch vụ" class="form-control" value="{{ $dichvu->tendichvu }}" />
-                            </div>
-                            <div class="col">
-                                <input type="text" name="dichvu_motangan[]" id="dichvu-motangan-{{ $i }}" placeholder="Mô tả ngắn" class="form-control" value="{{ $dichvu->motangan }}" />
-                            </div>
-                            <div class="col">
-                                <input type="number" name="dichvu_gia[]" id="dichvu-gia-{{ $i }}" placeholder="Giá" cleave-auto-unmask="true" class="form-control input-element-number number" value="{{ $dichvu->gia }}" />
-                            </div>
-                            <div class="col col-md-auto">
-                                <button type="button" name="remove" id="{{ $i }}" class="btn btn-danger btn_remove">X</button>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col">
-                                <input type="text" name="dichvu_gioithieu[]" id="dichvu-gioithieu-{{ $i }}" placeholder="Giới thiệu" class="form-control" value="{{ $dichvu->gioithieu }}" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                <?php
-                $i++;
-                ?>
-                @endforeach
-            </div> -->
+            
         </div>
 
         <div class="card-footer">
             <div class="row">
                 <div class="col">
-                    {{ form_cancel(route('admin.diadiem.index'), __('buttons.general.cancel')) }}
+                    {{ form_cancel(route('admin.tourdulich.index'), __('buttons.general.cancel')) }}
                 </div><!--col-->
 
                 <div class="col text-right">
@@ -300,7 +204,7 @@
 {{ html()->closeModelForm() }}
 
 <!-- dynamic row template -->
-@include('backend.diadiem.includes.dynamic-row-template')
+@include('backend.tourdulich.includes.dynamic-row-template')
 
 @endsection
 
@@ -357,62 +261,26 @@
             ['clean'], // remove formatting button
             ['link', 'image', 'video']
         ];
-        var editor = new Quill('#gioithieu-editor-container', {
-            modules: {
-                toolbar: toolbarOptions
-            },
-            theme: 'snow'
-        });
-        editor.container.style.height = '300px';
-        $('.quill-form').submit(function () {
-            var gioithieu = document.querySelector('input[name=gioithieu]');
-            gioithieu.value = editor.root.innerHTML;
-        });
+        // var editor = new Quill('#gioithieu-editor-container', {
+        //     modules: {
+        //         toolbar: toolbarOptions
+        //     },
+        //     theme: 'snow'
+        // });
+        // editor.container.style.height = '300px';
+        // $('.quill-form').submit(function () {
+        //     var gioithieu = document.querySelector('input[name=gioithieu]');
+        //     gioithieu.value = editor.root.innerHTML;
+        // });
 
-        //Dynamic field
-        var i={{ $diadiem->dichvus->count() }};  
-        $('#add').click(function(){  
-            var dichvuRowTemplate = document.getElementById("dichvu-row-template").innerHTML;
-            var templateFn = _.template(dichvuRowTemplate);
-            var templateHTML = templateFn({
-                'index': i,
-                'tendichvu': null,
-                'motangan': null,
-                'gia': null,
-                'gioithieu': null
-            });
-            $('#dynamic_field').append(templateHTML);
-
-            // $('#dichvu-gia-'+i).cleave({ numeral: true, numeralThousandsGroupStyle: 'thousand', autoUnmask: true});
-
-            var anhdaidien_file_options = {
-                theme: 'fas',
-                overwriteInitial: true,
-                maxFileSize: 1500,
-                showClose: true,
-                showUpload: false,
-                showCaption: true,
-                //showBrowse: false,
-                //browseOnZoneClick: true,
-                removeLabel: '',
-                removeTitle: 'Cancel or reset changes',
-                elErrorContainer: '#kv-avatar-errors-anhdaidien-file',
-                msgErrorClass: 'alert alert-block alert-danger',
-                defaultPreviewContent: '<img src="'+defaultImg+'" alt="No image" style="width:auto;height:auto;max-width:100%;max-height:100%;"><h6 class="text-muted">Click để chọn ảnh</h6>',
-                //layoutTemplates: {main2: '{preview} {remove}'},
-                allowedFileExtensions: ["jpg", "png", "gif"],
-            };
-            $("#dichvu-anhdaidien-file-"+i).fileinput(anhdaidien_file_options);
-            i++;
-        });  
-
+        
         $(document).on('click', '.btn_remove', function(){  
             var button_id = $(this).attr("id");   
             $('#dynamic-row-'+button_id+'').remove();  
         });  
 
         var defaultImg = "{{ asset('img/'.'default-image-450x450.png') }}";
-        var anhdaidien_file_options = {
+        var hinhanh_file_options = {
             theme: 'fas',
             overwriteInitial: true,
             maxFileSize: 1500,
@@ -423,65 +291,27 @@
             //browseOnZoneClick: true,
             removeLabel: '',
             removeTitle: 'Cancel or reset changes',
-            elErrorContainer: '#kv-avatar-errors-anhdaidien-file',
+            elErrorContainer: '#kv-avatar-errors-hinhanh-file',
             msgErrorClass: 'alert alert-block alert-danger',
             defaultPreviewContent: '<img src="'+defaultImg+'" alt="No image" style="width:auto;height:auto;max-width:100%;max-height:100%;"><h6 class="text-muted">Click để chọn ảnh</h6>',
             //layoutTemplates: {main2: '{preview} {remove}'},
             allowedFileExtensions: ["jpg", "png", "gif"],
-            @if(!empty($diadiem->anhdaidien))
+            @if(!empty($tourdulich->hinhanh))
             initialPreview: [
-                "<img src='{{ asset('storage/' . $diadiem->anhdaidien) }}' class='file-preview-image kv-preview-data' alt='{{ $diadiem->tendiadiem }}' style='width:auto;height:auto;max-width:100%;max-height:100%;'>",
+                "<img src='{{ asset('storage/' . $tourdulich->hinhanh) }}' class='file-preview-image kv-preview-data' alt='{{ $tourdulich->tentourdulich }}' style='width:auto;height:auto;max-width:100%;max-height:100%;'>",
             ],
             initialPreviewConfig: [
                 {
-                    caption: "{{ $diadiem->tendiadiem }}", 
-                    size: {{ Storage::exists('public/' . $diadiem->anhdaidien) ? Storage::size('public/' . $diadiem->anhdaidien) : 0 }}, 
+                    caption: "{{ $tourdulich->tentourdulich }}", 
+                    size: {{ Storage::exists('public/' . $tourdulich->hinhanh) ? Storage::size('public/' . $tourdulich->hinhanh) : 0 }}, 
                     width: "120px", 
                     key: 1
                 },
             ],
             @endif
         };
-        $("#anhdaidien-file").fileinput(anhdaidien_file_options);
+        $("#hinhanh-file").fileinput(hinhanh_file_options);
 
-        <?php
-        $i=0;
-        ?>
-        @foreach($diadiem->dichvus as $dichvu)0
-        // $('#dichvu-gia-{{ $i }}').cleave({ numeral: true, numeralThousandsGroupStyle: 'thousand', autoUnmask: true});
-        $("#dichvu-anhdaidien-file-{{ $i }}").fileinput({
-            theme: 'fas',
-            overwriteInitial: true,
-            maxFileSize: 1500,
-            showClose: false,
-            showCaption: false,
-            //showBrowse: false,
-            //browseOnZoneClick: true,
-            removeLabel: '',
-            removeTitle: 'Cancel or reset changes',
-            elErrorContainer: '#kv-avatar-errors-dichvu-anhdaidien-file1',
-            msgErrorClass: 'alert alert-block alert-danger',
-            defaultPreviewContent: '<img src="'+defaultImg+'" alt="No image" style="width:auto;height:auto;max-width:100%;max-height:100%;"><h6 class="text-muted">Click để chọn ảnh</h6>',
-            //layoutTemplates: {main2: '{preview} {remove} {browse}'},
-            allowedFileExtensions: ["jpg", "png", "gif"],
-            @if(!empty($dichvu->anhdaidien))
-            initialPreview: [
-                "<img src='{{ asset('storage/' . $dichvu->anhdaidien) }}' class='file-preview-image kv-preview-data' alt='{{ $dichvu->tendichvu }}' style='width:auto;height:auto;max-width:100%;max-height:100%;'>",
-            ],
-            initialPreviewConfig: [
-                {
-                    caption: "{{ $dichvu->tendichvu }}", 
-                    size: {{ Storage::exists('public/' . $dichvu->anhdaidien) ? Storage::size('public/' . $dichvu->anhdaidien) : 0 }}, 
-                    width: "120px", 
-                    key: 1
-                },
-            ],
-            @endif
-        });
-        <?php
-        $i++;
-        ?>
-        @endforeach
         
         
 });

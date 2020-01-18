@@ -42,7 +42,7 @@ class TourDuLichController extends Controller
     public function index(ManageTourDuLichRequest $request)
     {
         return view('backend.tourdulich.index')
-            ->with('tourdulichms', $this->TourDuLichRepository->getActivePaginated(25, 'id', 'asc'));
+            ->with('tourdulichs', $this->TourDuLichRepository->getActivePaginated(25, 'id', 'asc'));
     }
 
     /**
@@ -75,8 +75,7 @@ class TourDuLichController extends Controller
         //dd($diachis[0]['all']);
 
         return view('backend.tourdulich.create')
-            ->with('quanhuyens', $quanhuyens)
-            ->with('diachis', $diachis);
+            ->with('quanhuyens', $quanhuyens);
     }
 
     /**
@@ -89,47 +88,30 @@ class TourDuLichController extends Controller
     {
         // dd($request);
         $inputs = $request->only(
-            'madiemthamquan',
-            'tentourdulichm',
-            'motangan',
-            'gioithieu',
-            'tukhoa',
-            'dienthoai',
-            'email',
-            'giomocua',
-            'giodongcua',
-            'GPS',
-            'id_quanhuyen'
+            'matourdulich',
+            'tentourdulich',
+            'giatour_nguoilon',
+            'giatour_treem',
+            'diemkhoihanh_ten',
+            'diemkhoihanh_id_quanhuyen',
+            'diemkhoihanh_toado_string',
+            'diemden_ten',
+            'diemden_id_quanhuyen',
+            'diemden_toado_string',
+            'songaytour'
         );
-        $inputs['trangthai'] = $request->has('trangthai') ? '1' : '0';
-
-        // $strTinhThanh = $request->input('slTinhThanh');
-        // $arrTinhThanh = explode("-", $strTinhThanh);
-        // $inputs['diachi'] = new DiaChi([
-        //     'tendiachi' => $request->input('tendiachi'),
-        //     'tinhthanh' => isset($arrTinhThanh[0]) ? trim($arrTinhThanh[0]) : '',
-        //     'quanhuyen' => isset($arrTinhThanh[1]) ? trim($arrTinhThanh[1]) : '',
-        //     'xaphuong' => isset($arrTinhThanh[2]) ? trim($arrTinhThanh[2]) : '',
-        // ]);
-
-        // $inputs['diachi'] = new DiaChi([
-        //     'tendiachi' => $request->input('tendiachi'),
-        //     'tinhthanh' => $request->input('tinhthanh'),
-        //     'quanhuyen' => $request->input('quanhuyen'),
-        //     'xaphuong' => $request->input('xaphuong'),
-        // ]);
 
         // $anhdaidien_file;
-        if($request->hasFile('anhdaidien_file'))
+        if($request->hasFile('hinhanh_file'))
         {
             // $upload_dir = 'uploads/img/' . date("Y") . '/' . date("m") . "/";
             $upload_dir = '';
-            $file     = $request->anhdaidien_file;
+            $file     = $request->hinhanh_file;
             $fileName = rand(1, 999) . $file->getClientOriginalName();
             $filePath = $upload_dir  . $fileName;
             
             $file->storeAs('public/' . $upload_dir, $fileName);
-            $inputs['anhdaidien'] = $filePath;
+            $inputs['hinhanh'] = $filePath;
             
             // dd($file->getPathName());
             // $temp = file_get_contents($file->getPathName());
@@ -139,7 +121,7 @@ class TourDuLichController extends Controller
         }
         else
         {
-            $inputs['anhdaidien'] = null;
+            $inputs['hinhanh'] = null;
             // $inputs['anhdaidien_blob'] = null;
         }
 
@@ -173,7 +155,7 @@ class TourDuLichController extends Controller
 
         $this->TourDuLichRepository->create($inputs);
 
-        return redirect()->route('admin.tourdulichm.index')->withFlashSuccess('Thêm mới Địa điểm thành công');
+        return redirect()->route('admin.tourdulich.index')->withFlashSuccess('Thêm mới Tour du lịch thành công');
     }
 
     /**
@@ -198,8 +180,8 @@ class TourDuLichController extends Controller
             $base64 = 'data:image/' . $type . ';base64,' . $data;
         }
 
-        return view('backend.tourdulichm.show')
-            ->with('tourdulichm', $TourDuLich)
+        return view('backend.tourdulich.show')
+            ->with('tourdulich', $TourDuLich)
             ->with('anhdaidien_base64', $base64);
     }
 
@@ -240,8 +222,8 @@ class TourDuLichController extends Controller
         //     'all' => $TourDuLich->diachi->tinhthanh.' - '.$TourDuLich->diachi->quanhuyen.' - '.$TourDuLich->diachi->xaphuong
         // ];
         // dd($TourDuLich);
-        return view('backend.tourdulichm.edit')
-            ->with('tourdulichm', $TourDuLich)
+        return view('backend.tourdulich.edit')
+            ->with('tourdulich', $TourDuLich)
             ->with('quanhuyens', $quanhuyens);
             // ->with('diachis', $diachis);
     }
@@ -257,22 +239,21 @@ class TourDuLichController extends Controller
     public function update(UpdateTourDuLichRequest $request, $_id)
     {
         // dd($request);
-        // Địa điểm
+        // Tour du lịch
         $TourDuLich = TourDuLich::find($_id);
         $inputs = $request->only(
-            'madiemthamquan',
-            'tentourdulichm',
-            'motangan',
-            'gioithieu',
-            'tukhoa',
-            'dienthoai',
-            'email',
-            'giomocua',
-            'giodongcua',
-            'GPS',
-            'id_quanhuyen'
+            'matourdulich',
+            'tentourdulich',
+            'giatour_nguoilon',
+            'giatour_treem',
+            'diemkhoihanh_ten',
+            'diemkhoihanh_id_quanhuyen',
+            'diemkhoihanh_toado_string',
+            'diemden_ten',
+            'diemden_id_quanhuyen',
+            'diemden_toado_string',
+            'songaytour'
         );
-        $inputs['trangthai'] = $request->has('trangthai') ? '1' : '0';
 
         
 
@@ -293,16 +274,16 @@ class TourDuLichController extends Controller
         // ]);
         
         // $anhdaidien_file;
-        if($request->hasFile('anhdaidien_file'))
+        if($request->hasFile('hinhanh_file'))
         {
             // $upload_dir = 'uploads/img/' . date("Y") . '/' . date("m") . "/";
             $upload_dir = '';
-            $file     = $request->anhdaidien_file;
+            $file     = $request->hinhanh_file;
             $fileName = rand(1, 999) . $file->getClientOriginalName();
             $filePath = $upload_dir  . $fileName;
             
             $file->storeAs('public/' . $upload_dir, $fileName);
-            $inputs['anhdaidien'] = $filePath;
+            $inputs['hinhanh'] = $filePath;
 
             // $temp = file_get_contents($file->getPathName());
             // $blob = base64_encode($temp);
@@ -310,7 +291,7 @@ class TourDuLichController extends Controller
         }
         else
         {
-            $inputs['anhdaidien'] = $TourDuLich->anhdaidien;
+            $inputs['hinhanh'] = $TourDuLich->hinhanh;
         }
         
         // Dịch vụ
@@ -350,7 +331,7 @@ class TourDuLichController extends Controller
             //Storage::delete('public/uploads/img/' . $sp->sp_hinh);
         }
 
-        return redirect()->route('admin.tourdulichm.index')->withFlashSuccess('Cập nhật Địa điểm thành công!');
+        return redirect()->route('admin.tourdulich.index')->withFlashSuccess('Cập nhật Tour du lịch thành công!');
     }
 
     /**
@@ -364,6 +345,6 @@ class TourDuLichController extends Controller
     {
         $this->TourDuLichRepository->deleteById($_id);
 
-        return redirect()->route('admin.tourdulichm.index')->withFlashSuccess('Xóa địa điểm thành công');
+        return redirect()->route('admin.tourdulich.index')->withFlashSuccess('Xóa địa điểm thành công');
     }
 }

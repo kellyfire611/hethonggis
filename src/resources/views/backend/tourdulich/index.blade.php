@@ -27,14 +27,22 @@
                     <table class="table">
                         <thead>
                         <tr>
+                            <th>Hình ảnh</th>
+                            <th>Mã tour du lịch</th>
                             <th>Tên tour du lịch</th>
+                            <th>Điểm khởi hành</th>
+                            <th>Điểm đến</th>
                             <th>@lang('labels.general.actions')</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($tourdulichs as $tourdulich)
                             <tr>
+                                <td><img src="{{ asset('storage/'.$tourdulich->hinhanh) }}" style="width: 100px; height:100px;" /></td>
+                                <td>{!! $tourdulich->matourdulich !!}</td>
                                 <td>{!! $tourdulich->tentourdulich !!}</td>
+                                <td>{!! $tourdulich->diemkhoihanhquanhuyen->NAME_2 !!}</td>
+                                <td>{!! $tourdulich->diemdenquanhuyen->NAME_2 !!}</td>
                                 <td>{!! $tourdulich->action_buttons !!}</td>
                             </tr>
                         @endforeach
@@ -46,7 +54,7 @@
         <div class="row">
             <div class="col-7">
                 <div class="float-left">
-                    {!! $tourdulichs->total() !!} {{ trans_choice('Địa điểm', $tourdulichs->total()) }}
+                    {!! $tourdulichs->total() !!} {{ trans_choice('Tour du lịch', $tourdulichs->total()) }}
                 </div>
             </div><!--col-->
 

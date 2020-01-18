@@ -105,15 +105,16 @@ class TourDuLichRepository extends BaseRepository
     {
         // dd($data);
         $TourDuLich = parent::create([
+            'matourdulich' => $data['matourdulich'],
             'tentourdulich' => $data['tentourdulich'],
             'giatour_nguoilon' => $data['giatour_nguoilon'],
             'giatour_treem' => $data['giatour_treem'],
             'diemkhoihanh_ten' => $data['diemkhoihanh_ten'],
             'diemkhoihanh_id_quanhuyen' => $data['diemkhoihanh_id_quanhuyen'],
-            'diemkhoihanh_toado' => $data['diemkhoihanh_toado'],
+            'diemkhoihanh_toado_string' => $data['diemkhoihanh_toado_string'],
             'diemden_ten' => $data['diemden_ten'],
             'diemden_id_quanhuyen' => $data['diemden_id_quanhuyen'],
-            'diemden_toado' => $data['diemden_toado'],
+            'diemden_toado_string' => $data['diemden_toado_string'],
             'songaytour' => $data['songaytour'],
             'hinhanh' => $data['hinhanh'],
         ]);
@@ -149,10 +150,10 @@ class TourDuLichRepository extends BaseRepository
             'giatour_treem' => $data['giatour_treem'],
             'diemkhoihanh_ten' => $data['diemkhoihanh_ten'],
             'diemkhoihanh_id_quanhuyen' => $data['diemkhoihanh_id_quanhuyen'],
-            'diemkhoihanh_toado' => $data['diemkhoihanh_toado'],
+            'diemkhoihanh_toado_string' => $data['diemkhoihanh_toado_string'],
             'diemden_ten' => $data['diemden_ten'],
             'diemden_id_quanhuyen' => $data['diemden_id_quanhuyen'],
-            'diemden_toado' => $data['diemden_toado'],
+            'diemden_toado_string' => $data['diemden_toado_string'],
             'songaytour' => $data['songaytour'],
             'hinhanh' => $data['hinhanh'],
         ])) {

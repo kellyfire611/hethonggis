@@ -4,8 +4,8 @@
             <a class="btn dropdown-toggle" href="#" role="button" id="breadcrumb-dropdown-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Địa điểm</a>
 
             <div class="dropdown-menu" aria-labelledby="breadcrumb-dropdown-1">
-                <a class="dropdown-item" href="{{ route('admin.diadiem.index') }}">Tất cả</a>
-                <a class="dropdown-item" href="{{ route('admin.diadiem.create') }}">Thêm mới</a>
+                <a class="dropdown-item" href="{{ route('admin.tourdulich.index') }}">Tất cả</a>
+                <a class="dropdown-item" href="{{ route('admin.tourdulich.create') }}">Thêm mới</a>
             </div>
         </div><!--dropdown-->
 
